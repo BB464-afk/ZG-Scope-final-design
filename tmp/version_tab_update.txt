@@ -1,0 +1,227 @@
+      {/* VERSIONS TAB */}
+      {activeTab === 'versions' && (() => {
+        // Apply filters
+        const filteredVersions = MOCK_VERSION_HISTORY
+          .filter(v => v.version.toLowerCase().includes(versionSearch.toLowerCase()))
+          .filter(v => v.status.toLowerCase().includes(statusSearch.toLowerCase()))
+          .filter(v => v.description.toLowerCase().includes(descriptionSearch.toLowerCase()))
+          .filter(v => v.submittedBy.toLowerCase().includes(submittedBySearch.toLowerCase()))
+          .filter(v => v.submittedDate.includes(submittedDateSearch));
+        
+        return (
+        <>
+          {isTabHidden('versions') ? (
+            <DesignInProgress />
+          ) : (
+        <div style={{ padding: '24px 32px', maxWidth: '1200px', margin: '0 auto' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: '600', color: '#111827', marginBottom: '24px' }}>
+            Version History
+          </h2>
+
+          {/* AG Grid Style Table */}
+          <div style={{ 
+            border: '1px solid #C8D9EE', 
+            borderRadius: '4px',
+            overflow: 'auto',
+            overflowX: 'auto'
+          }}>
+            <table className="ag-grid-table" style={{ width: '100%', minWidth: '900px' }}>
+              <thead>
+                <tr>
+                  <th style={{ textAlign: 'left', minWidth: '100px' }}>Version</th>
+                  <th style={{ textAlign: 'left', minWidth: '120px' }}>Status</th>
+                  <th style={{ textAlign: 'left', minWidth: '280px' }}>Description</th>
+                  <th style={{ textAlign: 'left', width: '180px' }}>Progress</th>
+                  <th style={{ textAlign: 'left', width: '140px' }}>Submitted By</th>
+                  <th style={{ textAlign: 'left', width: '140px' }}>Submitted Date</th>
+                  <th style={{ textAlign: 'center', width: '120px' }}>Actions</th>
+                </tr>
+              </thead>
+              
+              {/* Filter Row */}
+              <tbody>
+                <tr style={{ backgroundColor: '#FAFBFC' }}>
+                  <td style={{ height: '40px', padding: '6px 8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <input
+                        type="text"
+                        placeholder="Filter..."
+                        value={versionSearch}
+                        onChange={(e) => setVersionSearch(e.target.value)}
+                        style={{
+                          flex: 1,
+                          minWidth: 0,
+                          height: '28px',
+                          border: '1px solid #D1D5DB',
+                          borderRadius: '3px',
+                          padding: '0 8px',
+                          fontSize: '12px',
+                          outline: 'none'
+                        }}
+                      />
+                      <Filter size={14} style={{ color: '#9CA3AF', flexShrink: 0 }} />
+                    </div>
+                  </td>
+                  <td style={{ height: '40px', padding: '6px 8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <input
+                        type="text"
+                        placeholder="Filter..."
+                        value={statusSearch}
+                        onChange={(e) => setStatusSearch(e.target.value)}
+                        style={{
+                          flex: 1,
+                          minWidth: 0,
+                          height: '28px',
+                          border: '1px solid #D1D5DB',
+                          borderRadius: '3px',
+                          padding: '0 8px',
+                          fontSize: '12px',
+                          outline: 'none'
+                        }}
+                      />
+                      <Filter size={14} style={{ color: '#9CA3AF', flexShrink: 0 }} />
+                    </div>
+                  </td>
+                  <td style={{ height: '40px', padding: '6px 8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <input
+                        type="text"
+                        placeholder="Filter..."
+                        value={descriptionSearch}
+                        onChange={(e) => setDescriptionSearch(e.target.value)}
+                        style={{
+                          flex: 1,
+                          minWidth: 0,
+                          height: '28px',
+                          border: '1px solid #D1D5DB',
+                          borderRadius: '3px',
+                          padding: '0 8px',
+                          fontSize: '12px',
+                          outline: 'none'
+                        }}
+                      />
+                      <Filter size={14} style={{ color: '#9CA3AF', flexShrink: 0 }} />
+                    </div>
+                  </td>
+                  <td style={{ height: '40px', padding: '6px 8px' }}>
+                    {/* No filter for Progress column */}
+                  </td>
+                  <td style={{ height: '40px', padding: '6px 8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <input
+                        type="text"
+                        placeholder="Filter..."
+                        value={submittedBySearch}
+                        onChange={(e) => setSubmittedBySearch(e.target.value)}
+                        style={{
+                          flex: 1,
+                          minWidth: 0,
+                          height: '28px',
+                          border: '1px solid #D1D5DB',
+                          borderRadius: '3px',
+                          padding: '0 8px',
+                          fontSize: '12px',
+                          outline: 'none'
+                        }}
+                      />
+                      <Filter size={14} style={{ color: '#9CA3AF', flexShrink: 0 }} />
+                    </div>
+                  </td>
+                  <td style={{ height: '40px', padding: '6px 8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <input
+                        type="text"
+                        placeholder="Filter..."
+                        value={submittedDateSearch}
+                        onChange={(e) => setSubmittedDateSearch(e.target.value)}
+                        style={{
+                          flex: 1,
+                          minWidth: 0,
+                          height: '28px',
+                          border: '1px solid #D1D5DB',
+                          borderRadius: '3px',
+                          padding: '0 8px',
+                          fontSize: '12px',
+                          outline: 'none'
+                        }}
+                      />
+                      <Filter size={14} style={{ color: '#9CA3AF', flexShrink: 0 }} />
+                    </div>
+                  </td>
+                  <td style={{ height: '40px', padding: '6px 8px' }}>
+                    {/* No filter for Actions column */}
+                  </td>
+                </tr>
+
+                {/* Data Rows */}
+                {filteredVersions.map((version) => (
+                  <tr key={version.id}>
+                    <td style={{ textAlign: 'left' }}>
+                      <span style={{ fontWeight: '600' }}>{version.version}</span>
+                    </td>
+                    <td style={{ textAlign: 'left' }}>
+                      {getVersionStatusBadge(version.status)}
+                    </td>
+                    <td style={{ textAlign: 'left', color: '#374151' }}>
+                      {version.description}
+                    </td>
+                    <td>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div style={{
+                          flex: 1,
+                          height: '8px',
+                          backgroundColor: '#F3F4F6',
+                          borderRadius: '4px',
+                          overflow: 'hidden'
+                        }}>
+                          <div style={{
+                            width: `${version.progressPercent}%`,
+                            height: '100%',
+                            backgroundColor: '#FD4314',
+                            borderRadius: '4px'
+                          }} />
+                        </div>
+                        <span style={{
+                          fontSize: '13px',
+                          fontWeight: '600',
+                          color: '#111827',
+                          minWidth: '45px'
+                        }}>
+                          {version.progressPercent}%
+                        </span>
+                      </div>
+                    </td>
+                    <td style={{ textAlign: 'left', color: '#6B7280' }}>
+                      {version.submittedBy}
+                    </td>
+                    <td style={{ textAlign: 'left', color: '#6B7280' }}>
+                      {version.submittedDate}
+                    </td>
+                    <td style={{ textAlign: 'center' }}>
+                      <button
+                        onClick={() => navigate(`/app/projects/${projectId}/tasks/${taskId}/versions/${version.id}`)}
+                        style={{
+                          padding: '6px 12px',
+                          border: '1px solid #D1D5DB',
+                          backgroundColor: '#FFFFFF',
+                          borderRadius: '4px',
+                          fontSize: '13px',
+                          fontWeight: '500',
+                          color: '#374151',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        View Details
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+          )}
+        </>
+        );
+      })()}

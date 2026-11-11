@@ -1,0 +1,105 @@
+/* AG Grid Enterprise Theme for ZG-CMP */
+/* Zauner CMP Blue Theme with no vertical gridlines */
+
+.ag-grid-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  background-color: #FFFFFF;
+}
+
+/* Header Styling */
+.ag-grid-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.ag-grid-table th {
+  background-color: #E4EEF8;
+  color: #272721;
+  font-weight: 600;
+  font-size: 13px;
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid #C8D9EE;
+  border-right: none; /* NO vertical lines */
+  white-space: nowrap;
+}
+
+.ag-grid-table th:first-child {
+  text-align: center;
+  width: 50px;
+}
+
+/* Row Styling - Alternating colors */
+.ag-grid-table tbody tr {
+  height: 52px;
+  border-bottom: 1px solid #E5E7EB;
+  cursor: pointer;
+  transition: background-color 0.1s ease;
+}
+
+.ag-grid-table tbody tr:nth-child(even) {
+  background-color: #FFFFFF;
+}
+
+.ag-grid-table tbody tr:nth-child(odd) {
+  background-color: #F4F8FD; /* Soft blue tint */
+}
+
+.ag-grid-table tbody tr:hover {
+  background-color: #EFF6FF !important;
+}
+
+.ag-grid-table tbody tr.selected {
+  background-color: #FFF5F2 !important;
+}
+
+/* Cell Styling */
+.ag-grid-table td {
+  padding: 12px 16px;
+  color: #1F2937;
+  border-right: none; /* NO vertical lines */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ag-grid-table td:first-child {
+  text-align: center;
+}
+
+/* Status badges */
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.status-active {
+  background-color: #DEF7EC;
+  color: #03543F;
+}
+
+.status-inactive {
+  background-color: #F3F4F6;
+  color: #6B7280;
+}
+
+/* Checkbox styling */
+.ag-grid-table input[type="checkbox"] {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
+/* Table container */
+.ag-grid-container {
+  border: 1px solid #C8D9EE;
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: #FAFAFA;
+}

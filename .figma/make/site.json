@@ -1,0 +1,11 @@
+{
+  "title": "HB-ZG",
+  "description": "This web application provides a structured authenticated layout for enterprise solutions, offering a clean, organized interface for user navigation and content display.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

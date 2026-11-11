@@ -1,0 +1,15 @@
+This file contains the restructured views section for ProgressApprovalQueue.tsx
+
+The structure should be:
+1. View Toggle (Flat/Grouped)
+2. IF Flat View:
+   - Approve/Reject buttons only
+   - Ungrouped table
+3. IF Grouped View:
+   - Search bar (for group headers)
+   - Status filter
+   - Sort By
+   - Group By
+   - Grouped table with expand/collapse
+
+The key is that `groupBy` state should determine what's shown in grouped view, while flat view always shows ungrouped table.

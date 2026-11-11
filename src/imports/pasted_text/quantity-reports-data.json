@@ -1,0 +1,130 @@
+Update the **Quantity Reports screen data**.
+
+Navigation path:
+
+Main → Select Project → All Reports → **Quantity Reports**
+
+Do **NOT modify layout, UI structure, table format, tabs, filters, styling, buttons, or interactions**.
+Only update the **table values and section data** using the dataset provided.
+
+---
+
+# DATA STRUCTURE
+
+The Quantity Report table must display the following columns exactly as they already exist:
+
+Activity / Quantity Descriptor
+UOM
+Total Planned Qty
+Installed (Period)
+Installed (To-Date)
+To Go
+% Complete
+
+Data should be grouped by **Area**.
+
+---
+
+# AREA A DATA
+
+### Row 1
+
+Activity / Quantity Descriptor: Cable Installation
+UOM: LM
+Total Planned Qty: 2,100
+Installed (Period): 310
+Installed (To-Date): 1,500
+To Go: 600
+% Complete: 71%
+
+---
+
+### Row 2
+
+Activity / Quantity Descriptor: Sprinkler Piping
+UOM: LM
+Total Planned Qty: 1,200
+Installed (Period): 200
+Installed (To-Date): 800
+To Go: 400
+% Complete: 67%
+
+---
+
+### Row 3
+
+Activity / Quantity Descriptor: Ceiling Installation
+UOM: m²
+Total Planned Qty: 4,200
+Installed (Period): 620
+Installed (To-Date): 3,010
+To Go: 1,190
+% Complete: 72%
+
+---
+
+### Row 4
+
+Activity / Quantity Descriptor: Structural Steel
+UOM: MT
+Total Planned Qty: 950
+Installed (Period): 120
+Installed (To-Date): 600
+To Go: 350
+% Complete: 63%
+
+---
+
+# AREA B DATA
+
+### Row 1
+
+Activity / Quantity Descriptor: Cable Installation
+UOM: LM
+Total Planned Qty: 1,800
+Installed (Period): 250
+Installed (To-Date): 1,200
+To Go: 600
+% Complete: 67%
+
+---
+
+### Row 2
+
+Activity / Quantity Descriptor: Sprinkler Piping
+UOM: LM
+Total Planned Qty: 900
+Installed (Period): 150
+Installed (To-Date): 550
+To Go: 350
+% Complete: 61%
+
+---
+
+### Row 3
+
+Activity / Quantity Descriptor: Ceiling Installation
+UOM: m²
+Total Planned Qty: 3,800
+Installed (Period): 560
+Installed (To-Date): 2,720
+To Go: 1,080
+% Complete: 72%
+
+---
+
+### Row 4
+
+Activity / Quantity Descriptor: Structural Steel
+UOM: MT
+Total Planned Qty: 1,000
+Installed (Period): 100
+Installed (To-Date): 1,000
+To Go: 0
+% Complete: 100%
+
+---
+
+Ensure the data replaces the current values in the Quantity Reports tables.
+
+Do not change any layout, UI structure, table grouping style, headers, filters, or interactions.
