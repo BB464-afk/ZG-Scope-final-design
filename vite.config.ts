@@ -37,6 +37,10 @@ export default defineConfig({
     },
   },
 
+  optimizeDeps: {
+    include: ['xlsx'],
+  },
+
   // File types to support raw imports. Never add .css, .tsx, or .ts files to this.
   assetsInclude: ['**/*.svg', '**/*.csv'],
 })

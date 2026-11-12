@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { Download, Upload, Plus, Edit, LayoutGrid, Table2, X, Filter as FilterIcon, ChevronDown, ChevronRight, FileText, History, FileSpreadsheet, Lock, Unlock } from 'lucide-react';
+import { Download, Upload, Plus, Edit, LayoutGrid, Table2, X, Filter as FilterIcon, ChevronDown, ChevronRight, FileText, History, FileSpreadsheet, Lock, Unlock, Link2, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
 import ImportFilesModal from '../components/ImportFilesModal';
 import StandardDropdown from '../components/StandardDropdown';
@@ -25,6 +25,8 @@ const MOCK_TASKS_DATA = [
     spa: 'SPA-001 - SPA Package 001',
     costType: 'CT-01 - Capex',
     deliveryPackage: 'DP-01 - Q1 2024 Delivery',
+    rocId: 'ROC-002',
+    tradePackageCode: 'S02',
     workComplete: 75,
     status: 'In Progress',
     createdAt: '14/02/2026'
@@ -44,6 +46,8 @@ const MOCK_TASKS_DATA = [
     spa: 'SPA-002 - SPA Package 002',
     costType: 'CT-02 - Opex',
     deliveryPackage: 'DP-02 - Q2 2024 Delivery',
+    rocId: 'ROC-002',
+    tradePackageCode: 'S02',
     workComplete: 45,
     status: 'In Progress',
     createdAt: '10/02/2026'
@@ -63,6 +67,8 @@ const MOCK_TASKS_DATA = [
     spa: 'SPA-003 - SPA Package 003',
     costType: 'CT-01 - Capex',
     deliveryPackage: 'DP-03 - Q3 2024 Delivery',
+    rocId: 'ROC-003',
+    tradePackageCode: 'E01',
     workComplete: 90,
     status: 'In Progress',
     createdAt: '08/02/2026'
@@ -82,6 +88,8 @@ const MOCK_TASKS_DATA = [
     spa: 'SPA-004 - SPA Package 004',
     costType: 'CT-01 - Capex',
     deliveryPackage: 'DP-04 - Q4 2024 Delivery',
+    rocId: 'ROC-004',
+    tradePackageCode: 'A01',
     workComplete: 30,
     status: 'In Progress',
     createdAt: '05/02/2026'
@@ -101,6 +109,8 @@ const MOCK_TASKS_DATA = [
     spa: 'SPA-001 - SPA Package 001',
     costType: 'CT-03 - Compliance',
     deliveryPackage: 'DP-01 - Q1 2024 Delivery',
+    rocId: 'ROC-001',
+    tradePackageCode: 'S01',
     workComplete: 100,
     status: 'Completed',
     createdAt: '01/02/2026'
@@ -120,6 +130,8 @@ const MOCK_TASKS_DATA = [
     spa: 'SPA-002 - SPA Package 002',
     costType: 'CT-01 - Capex',
     deliveryPackage: 'DP-02 - Q2 2024 Delivery',
+    rocId: 'ROC-004',
+    tradePackageCode: 'A01',
     workComplete: 60,
     status: 'In Progress',
     createdAt: '12/02/2026'
@@ -185,6 +197,46 @@ const DELIVERY_PACKAGE_OPTIONS = [
   { value: 'DP-04 - Q4 2024 Delivery', label: 'DP-04 - Q4 2024 Delivery' }
 ];
 
+// ── Drawing Links data — mirrors DrawingLinks.tsx INITIAL_LINKS exactly ───────
+const TASK_DRAWING_LINKS: {
+  tradePackageCode: string; rocId: string; stepNumber: number; stepName: string; link: string;
+}[] = [
+  { tradePackageCode: 'S01', rocId: 'ROC-001', stepNumber: 1, stepName: 'Material PO Issued',  link: 'https://drive.google.com/folders/S01-ROC001-STEP1' },
+  { tradePackageCode: 'S01', rocId: 'ROC-001', stepNumber: 2, stepName: 'Material Delivered',  link: 'https://drive.google.com/folders/S01-ROC001-STEP2' },
+  { tradePackageCode: 'S01', rocId: 'ROC-001', stepNumber: 3, stepName: 'Installation',         link: 'https://drive.google.com/folders/S01-ROC001-STEP3' },
+  { tradePackageCode: 'S01', rocId: 'ROC-001', stepNumber: 4, stepName: 'Testing',              link: 'https://drive.google.com/folders/S01-ROC001-STEP4' },
+  { tradePackageCode: 'S02', rocId: 'ROC-002', stepNumber: 1, stepName: 'Material PO Issued',  link: 'https://drive.google.com/folders/S02-ROC002-STEP1' },
+  { tradePackageCode: 'S02', rocId: 'ROC-002', stepNumber: 2, stepName: 'Material Delivered',  link: 'https://drive.google.com/folders/S02-ROC002-STEP2' },
+];
+
+// All steps per ROC (mirrors DrawingLinks.tsx ROCS)
+const ROC_STEPS: Record<string, { number: number; name: string }[]> = {
+  'ROC-001': [
+    { number: 1, name: 'Material PO Issued' },
+    { number: 2, name: 'Material Delivered' },
+    { number: 3, name: 'Installation' },
+    { number: 4, name: 'Testing' },
+  ],
+  'ROC-002': [
+    { number: 1, name: 'Material PO Issued' },
+    { number: 2, name: 'Material Delivered' },
+    { number: 3, name: 'Equipment Installation' },
+    { number: 4, name: 'Commissioning' },
+  ],
+  'ROC-003': [
+    { number: 1, name: 'Shop Drawing Approved' },
+    { number: 2, name: 'Material Delivered' },
+    { number: 3, name: 'Containment Installed' },
+    { number: 4, name: 'Inspection Complete' },
+  ],
+  'ROC-004': [
+    { number: 1, name: 'Material Approved' },
+    { number: 2, name: 'Area Released' },
+    { number: 3, name: 'Finish Applied' },
+    { number: 4, name: 'Snagging Complete' },
+  ],
+};
+
 // Activity options for Bulk Progress Update
 const ACTIVITY_OPTIONS = [
   { value: 'FO-01', label: 'FO-01 - Whitewash' },
@@ -201,6 +253,14 @@ export default function TasksListing() {
   
   // Check if project is read-only (On Hold, Completed, or Archived)
   const isProjectReadOnly = projectId === '5';
+  
+  // ── Drawing Links popup state ──
+  const [drawingLinksPopup, setDrawingLinksPopup] = useState<{
+    taskId: string;
+    taskName: string;
+    rocId: string;
+    tradePackageCode: string;
+  } | null>(null);
   
   // Submission Control state - can be toggled by user
   const [isProgressLocked, setIsProgressLocked] = useState(projectId === '1');
@@ -1479,6 +1539,42 @@ export default function TasksListing() {
                           >
                             <History size={14} />
                           </button>
+                          {/* Drawing Links button */}
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setDrawingLinksPopup({
+                                taskId: task.taskId,
+                                taskName: task.taskName,
+                                rocId: (task as any).rocId || '',
+                                tradePackageCode: (task as any).tradePackageCode || '',
+                              });
+                            }}
+                            title="Drawing Links"
+                            style={{
+                              width: '32px',
+                              height: '32px',
+                              border: '1px solid #D8DEE8',
+                              backgroundColor: '#FFFFFF',
+                              borderRadius: '4px',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              color: '#2563EB',
+                              flexShrink: 0
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.backgroundColor = '#EFF6FF';
+                              e.currentTarget.style.borderColor = '#93C5FD';
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.backgroundColor = '#FFFFFF';
+                              e.currentTarget.style.borderColor = '#D8DEE8';
+                            }}
+                          >
+                            <Link2 size={14} />
+                          </button>
                           <button 
                             onClick={(e) => {
                               e.stopPropagation();
@@ -2698,6 +2794,40 @@ export default function TasksListing() {
                               >
                                 <History size={14} />
                               </button>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setDrawingLinksPopup({
+                                    taskId: task.taskId || `T-00${task.id}`,
+                                    taskName: task.taskName || task.name || '',
+                                    rocId: (task as any).rocId || '',
+                                    tradePackageCode: (task as any).tradePackageCode || '',
+                                  });
+                                }}
+                                title="Drawing Links"
+                                style={{
+                                  width: '28px',
+                                  height: '28px',
+                                  border: '1px solid #D8DEE8',
+                                  backgroundColor: '#FFFFFF',
+                                  borderRadius: '4px',
+                                  cursor: 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  color: '#2563EB',
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.backgroundColor = '#EFF6FF';
+                                  e.currentTarget.style.borderColor = '#2563EB';
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.backgroundColor = '#FFFFFF';
+                                  e.currentTarget.style.borderColor = '#D8DEE8';
+                                }}
+                              >
+                                <Link2 size={14} />
+                              </button>
                               <button 
                                 onClick={(e) => {
                                   e.stopPropagation();
@@ -3615,6 +3745,218 @@ export default function TasksListing() {
           });
         }}
       />
+
+      {/* Drawing Links Popup */}
+      {drawingLinksPopup && (() => {
+        const { taskId, taskName, rocId, tradePackageCode } = drawingLinksPopup;
+        const steps = ROC_STEPS[rocId] || [];
+        const getLink = (stepNumber: number) =>
+          TASK_DRAWING_LINKS.find(
+            l => l.rocId === rocId && l.tradePackageCode === tradePackageCode && l.stepNumber === stepNumber
+          )?.link || null;
+
+        return (
+          <div
+            onClick={() => setDrawingLinksPopup(null)}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              zIndex: 2000,
+              backgroundColor: 'rgba(17, 24, 39, 0.5)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                backgroundColor: '#FFFFFF',
+                border: '1px solid #C8D9EE',
+                borderRadius: '6px',
+                width: '560px',
+                maxWidth: '95vw',
+                boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
+              }}
+            >
+              {/* Header */}
+              <div style={{
+                padding: '16px 20px',
+                borderBottom: '1px solid #E5E7EB',
+                display: 'flex',
+                alignItems: 'flex-start',
+                justifyContent: 'space-between',
+              }}>
+                <div>
+                  <h2 style={{ margin: '0 0 2px', fontSize: '16px', fontWeight: '600', color: '#1F2937' }}>
+                    Drawing Links
+                  </h2>
+                  <p style={{ margin: '0 0 2px', fontSize: '13px', color: '#374151', fontWeight: '500' }}>
+                    {taskId} – {taskName}
+                  </p>
+                  <p style={{ margin: 0, fontSize: '12px', color: '#6B7280' }}>
+                    Trade Package: {tradePackageCode} &nbsp;·&nbsp; {rocId}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setDrawingLinksPopup(null)}
+                  style={{
+                    border: '1px solid #D8DEE8',
+                    backgroundColor: '#FFFFFF',
+                    borderRadius: '4px',
+                    width: '32px',
+                    height: '32px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    color: '#6B7280',
+                    flexShrink: 0,
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#F3F4F6'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+                >
+                  <X size={15} />
+                </button>
+              </div>
+
+              {/* Table */}
+              <div style={{ padding: '0' }}>
+                {/* Table header */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: '56px 150px 1fr 72px',
+                  backgroundColor: '#E4EEF8',
+                  borderBottom: '1px solid #C8D9EE',
+                  padding: '0 20px',
+                }}>
+                  {['Step No.', 'Step Name', 'Drawing Folder Link', ''].map((h) => (
+                    <div key={h} style={{
+                      padding: '10px 0',
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      color: '#272721',
+                    }}>{h}</div>
+                  ))}
+                </div>
+                {/* Rows */}
+                {steps.length === 0 ? (
+                  <div style={{ padding: '32px 20px', textAlign: 'center', color: '#6B7280', fontSize: '13px' }}>
+                    No steps configured for {rocId}.
+                  </div>
+                ) : steps.map((step, idx) => {
+                  const link = getLink(step.number);
+                  return (
+                    <div
+                      key={step.number}
+                      style={{
+                        display: 'grid',
+                        gridTemplateColumns: '56px 150px 1fr 72px',
+                        padding: '0 20px',
+                        backgroundColor: idx % 2 === 0 ? '#FFFFFF' : '#F4F8FD',
+                        borderBottom: idx < steps.length - 1 ? '1px solid #E5E7EB' : 'none',
+                        alignItems: 'center',
+                        minHeight: '52px',
+                        overflow: 'hidden',
+                      }}
+                    >
+                      <div style={{ fontSize: '13px', color: '#374151', fontWeight: '600' }}>
+                        {step.number}
+                      </div>
+                      <div style={{ fontSize: '13px', color: '#272721', fontWeight: '500' }}>
+                        {step.name}
+                      </div>
+                      <div style={{ fontSize: '12px', paddingRight: '8px', minWidth: 0, overflow: 'hidden' }}>
+                        {link ? (
+                          <a
+                            href={link}
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{
+                              color: '#2563EB',
+                              textDecoration: 'none',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '4px',
+                              overflow: 'hidden',
+                            }}
+                          >
+                            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {link.replace('https://drive.google.com/folders/', 'drive.google.com/...')}
+                            </span>
+                            <ExternalLink size={11} style={{ flexShrink: 0 }} />
+                          </a>
+                        ) : (
+                          <span style={{ color: '#9CA3AF', fontStyle: 'italic' }}>No link added</span>
+                        )}
+                      </div>
+                      <div style={{ flexShrink: 0 }}>
+                        {link && (
+                          <a
+                            href={link}
+                            target="_blank"
+                            rel="noreferrer"
+                            style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              height: '28px',
+                              padding: '0 10px',
+                              backgroundColor: '#FFFFFF',
+                              border: '1px solid #2563EB',
+                              borderRadius: '4px',
+                              fontSize: '12px',
+                              fontWeight: '500',
+                              color: '#2563EB',
+                              textDecoration: 'none',
+                              cursor: 'pointer',
+                              whiteSpace: 'nowrap',
+                            }}
+                            onMouseEnter={(e) => {
+                              (e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#EFF6FF';
+                            }}
+                            onMouseLeave={(e) => {
+                              (e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#FFFFFF';
+                            }}
+                          >
+                            Open
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Footer */}
+              <div style={{
+                padding: '12px 20px',
+                borderTop: '1px solid #E5E7EB',
+                display: 'flex',
+                justifyContent: 'flex-end',
+              }}>
+                <button
+                  onClick={() => setDrawingLinksPopup(null)}
+                  style={{
+                    height: '36px',
+                    padding: '0 20px',
+                    border: '1px solid #D1D5DB',
+                    backgroundColor: '#FFFFFF',
+                    borderRadius: '4px',
+                    fontSize: '13px',
+                    fontWeight: '500',
+                    color: '#374151',
+                    cursor: 'pointer',
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#F9FAFB'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#FFFFFF'; }}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }

@@ -441,6 +441,34 @@ export default function DrawingLinks() {
     URL.revokeObjectURL(url);
   };
 
+  // Browser-safe xlsx download via base64 → Blob
+  const xlsxDownload = async (
+    sheets: { name: string; aoa: (string | number)[][]; cols?: { wch: number }[] }[],
+    filename: string,
+  ) => {
+    const XLSX = await import('xlsx');
+    const wb = XLSX.utils.book_new();
+    for (const s of sheets) {
+      const ws = XLSX.utils.aoa_to_sheet(s.aoa);
+      if (s.cols) ws['!cols'] = s.cols;
+      XLSX.utils.book_append_sheet(wb, ws, s.name);
+    }
+    const b64 = XLSX.write(wb, { bookType: 'xlsx', type: 'base64' }) as string;
+    const bytes = atob(b64);
+    const arr = new Uint8Array(bytes.length);
+    for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
+    const blob = new Blob([arr], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 200);
+  };
+
   const fieldStyle: React.CSSProperties = {
     width: "100%",
     height: "28px",
@@ -506,47 +534,43 @@ export default function DrawingLinks() {
             title="Download Template"
             onClick={async () => {
               try {
-                const XLSX = await import('xlsx');
-                const wb = XLSX.utils.book_new();
-
-                // Instructions sheet
-                const instrAoa = [
-                  [''],
-                  ['Drawing Links Import Template – Instructions'],
-                  ['Do not modify the sheet name or column headers.'],
-                  ['Fill data only in the DrawingLinks_Import sheet.'],
-                  ['Fields marked with * are mandatory.'],
-                  ['Trade Package Code is required (e.g. S01, E01, A01).'],
-                  ['ROC ID is required (e.g. ROC-001).'],
-                  ['Step Number is required and must be a positive integer.'],
-                  ['Step Name is required (e.g. Material PO Issued).'],
-                  ['Drawing Folder Link is required and must be a valid URL.'],
-                  ['Duplicate Trade Package Code + ROC ID + Step Number combinations are not allowed.'],
-                  ['Import supports new record creation only.'],
-                  ['Upload only .xlsx format.'],
-                  ['After upload, the system will show row-level preview results.'],
-                ];
-                const instrWs = XLSX.utils.aoa_to_sheet(instrAoa);
-                instrWs['!cols'] = [{ wch: 80 }];
-                XLSX.utils.book_append_sheet(wb, instrWs, 'Instructions');
-
-                // Data sheet
-                const dataAoa = [
-                  ['Required. Trade Package Code (e.g. S01).','Required. ROC ID (e.g. ROC-001).','Required. Positive integer (e.g. 1).','Required. Step name (e.g. Material PO Issued).','Required. Full URL to drawing folder.'],
-                  ['Trade Package Code*','ROC ID*','Step Number*','Step Name*','Drawing Folder Link*'],
-                  ['S01','ROC-001',1,'Material PO Issued','https://drive.google.com/drive/folders/sample-s01-roc001-step1'],
-                  ['S01','ROC-001',2,'Material Delivered','https://drive.google.com/drive/folders/sample-s01-roc001-step2'],
-                  ['S02','ROC-002',1,'Material PO Issued','https://drive.google.com/drive/folders/sample-s02-roc002-step1'],
-                  ['S02','ROC-002',2,'Equipment Installation','https://drive.google.com/drive/folders/sample-s02-roc002-step2'],
-                  ['E01','ROC-003',1,'Shop Drawing Approved','https://drive.google.com/drive/folders/sample-e01-roc003-step1'],
-                  ['A01','ROC-004',2,'Area Released','https://drive.google.com/drive/folders/sample-a01-roc004-step2'],
-                ];
-                const dataWs = XLSX.utils.aoa_to_sheet(dataAoa);
-                dataWs['!cols'] = [{ wch: 24 },{ wch: 16 },{ wch: 14 },{ wch: 32 },{ wch: 60 }];
-                XLSX.utils.book_append_sheet(wb, dataWs, 'DrawingLinks_Import');
-
                 const dateStr = new Date().toISOString().slice(0, 10);
-                XLSX.writeFile(wb, `Drawing-Links-Import-Template-${dateStr}.xlsx`);
+                await xlsxDownload([
+                  {
+                    name: 'Instructions',
+                    aoa: [
+                      [''],
+                      ['Drawing Links Import Template – Instructions'],
+                      ['Do not modify the sheet name or column headers.'],
+                      ['Fill data only in the DrawingLinks_Import sheet.'],
+                      ['Fields marked with * are mandatory.'],
+                      ['Trade Package Code is required (e.g. S01, E01, A01).'],
+                      ['ROC ID is required (e.g. ROC-001).'],
+                      ['Step Number is required and must be a positive integer.'],
+                      ['Step Name is required (e.g. Material PO Issued).'],
+                      ['Drawing Folder Link is required and must be a valid URL.'],
+                      ['Duplicate Trade Package Code + ROC ID + Step Number combinations are not allowed.'],
+                      ['Import supports new record creation only.'],
+                      ['Upload only .xlsx format.'],
+                      ['After upload, the system will show row-level preview results.'],
+                    ],
+                    cols: [{ wch: 80 }],
+                  },
+                  {
+                    name: 'DrawingLinks_Import',
+                    aoa: [
+                      ['Required. Trade Package Code (e.g. S01).','Required. ROC ID (e.g. ROC-001).','Required. Positive integer (e.g. 1).','Required. Step name (e.g. Material PO Issued).','Required. Full URL to drawing folder.'],
+                      ['Trade Package Code*','ROC ID*','Step Number*','Step Name*','Drawing Folder Link*'],
+                      ['S01','ROC-001',1,'Material PO Issued','https://drive.google.com/drive/folders/sample-s01-roc001-step1'],
+                      ['S01','ROC-001',2,'Material Delivered','https://drive.google.com/drive/folders/sample-s01-roc001-step2'],
+                      ['S02','ROC-002',1,'Material PO Issued','https://drive.google.com/drive/folders/sample-s02-roc002-step1'],
+                      ['S02','ROC-002',2,'Equipment Installation','https://drive.google.com/drive/folders/sample-s02-roc002-step2'],
+                      ['E01','ROC-003',1,'Shop Drawing Approved','https://drive.google.com/drive/folders/sample-e01-roc003-step1'],
+                      ['A01','ROC-004',2,'Area Released','https://drive.google.com/drive/folders/sample-a01-roc004-step2'],
+                    ],
+                    cols: [{ wch: 24 },{ wch: 16 },{ wch: 14 },{ wch: 32 },{ wch: 60 }],
+                  },
+                ], `Drawing-Links-Import-Template-${dateStr}.xlsx`);
                 toast.success("Drawing Links import template downloaded");
               } catch {
                 toast.error("Failed to download template");
@@ -581,28 +605,31 @@ export default function DrawingLinks() {
           />
           <button
             title="Export To Excel"
-            onClick={() => {
-              downloadCsv("drawing-links-export.csv", [
-                [
-                  "Trade Package Code",
-                  "ROC ID",
-                  "Step Number",
-                  "Step Name",
-                  "Drawing Folder Link",
-                  "Updated By",
-                  "Updated On",
-                ],
-                ...records.map((record) => [
-                  record.tradePackageCode,
-                  record.rocId,
-                  String(record.stepNumber),
-                  record.stepName,
-                  record.drawingFolderLink,
-                  record.updatedBy,
-                  record.updatedOn,
-                ]),
-              ]);
-              toast.success("Drawing links exported");
+            onClick={async () => {
+              try {
+                const dateStr = new Date().toISOString().slice(0, 10);
+                await xlsxDownload([
+                  {
+                    name: 'Drawing Links',
+                    aoa: [
+                      ['Trade Package Code','ROC ID','Step Number','Step Name','Drawing Folder Link','Updated By','Updated On'],
+                      ...records.map(r => [
+                        r.tradePackageCode,
+                        r.rocId,
+                        r.stepNumber,
+                        r.stepName,
+                        r.drawingFolderLink,
+                        r.updatedBy,
+                        r.updatedOn,
+                      ]),
+                    ],
+                    cols: [{ wch: 20 },{ wch: 12 },{ wch: 12 },{ wch: 32 },{ wch: 60 },{ wch: 20 },{ wch: 14 }],
+                  },
+                ], `Drawing-Links-Export-${dateStr}.xlsx`);
+                toast.success("Drawing links exported to Excel");
+              } catch {
+                toast.error("Failed to export");
+              }
             }}
             style={{ ...actionButtonStyle, marginRight: "8px" }}
           >

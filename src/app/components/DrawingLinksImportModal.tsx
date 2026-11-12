@@ -2,6 +2,29 @@ import React, { useState, useRef } from 'react';
 import { X, Upload, Download, FileSpreadsheet, CheckCircle, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
+// ─── Browser-safe xlsx download helper ───────────────────────────────────────
+async function downloadXlsx(sheets: { name: string; aoa: (string | number)[][]; cols?: { wch: number }[] }[], filename: string) {
+  const XLSX = await import('xlsx');
+  const wb = XLSX.utils.book_new();
+  for (const sheet of sheets) {
+    const ws = XLSX.utils.aoa_to_sheet(sheet.aoa);
+    if (sheet.cols) ws['!cols'] = sheet.cols;
+    XLSX.utils.book_append_sheet(wb, ws, sheet.name);
+  }
+  const b64 = XLSX.write(wb, { bookType: 'xlsx', type: 'base64' }) as string;
+  const bytes = atob(b64);
+  const arr = new Uint8Array(bytes.length);
+  for (let i = 0; i < bytes.length; i++) arr[i] = bytes.charCodeAt(i);
+  const blob = new Blob([arr], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 300);
+}
+
 interface ImportRecord {
   row: number;
   tradePackageCode: string;
@@ -35,70 +58,58 @@ export default function DrawingLinksImportModal({
   const [stats, setStats] = useState({ total: 0, valid: 0, error: 0 });
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // ── Template download (real .xlsx with sample data) ──────────────────────────
+  // ── Template download — matches Step_Links_Import_Template.xlsx exactly ─────
   const handleDownloadTemplate = async () => {
     try {
-      const XLSX = await import('xlsx');
-      const wb = XLSX.utils.book_new();
-
-      // Instructions sheet
-      const instrAoa = [
-        [''],
-        ['Drawing Links Import Template – Instructions'],
-        ['Do not modify the sheet name or column headers.'],
-        ['Fill data only in the DrawingLinks_Import sheet.'],
-        ['Fields marked with * are mandatory.'],
-        ['Trade Package Code is required (e.g. S01, E01, A01).'],
-        ['ROC ID is required (e.g. ROC-001).'],
-        ['Step Number is required and must be a positive integer.'],
-        ['Step Name is required (e.g. Material PO Issued).'],
-        ['Drawing Folder Link is required and must be a valid URL.'],
-        ['Duplicate Trade Package Code + ROC ID + Step Number combinations are not allowed.'],
-        ['Import supports new record creation only.'],
-        ['Upload only .xlsx format.'],
-        ['After upload, the system will show row-level preview results.'],
-      ];
-      const instrWs = XLSX.utils.aoa_to_sheet(instrAoa);
-      instrWs['!cols'] = [{ wch: 80 }];
-      XLSX.utils.book_append_sheet(wb, instrWs, 'Instructions');
-
-      // Data sheet with hint row + header + sample data
-      const dataAoa = [
-        [
-          'Required. Trade Package Code (e.g. S01).',
-          'Required. ROC ID (e.g. ROC-001).',
-          'Required. Positive integer (e.g. 1).',
-          'Required. Step name (e.g. Material PO Issued).',
-          'Required. Full URL to drawing folder.',
-        ],
-        [
-          'Trade Package Code*',
-          'ROC ID*',
-          'Step Number*',
-          'Step Name*',
-          'Drawing Folder Link*',
-        ],
-        // Sample rows
-        ['S01', 'ROC-001', 1, 'Material PO Issued',      'https://drive.google.com/drive/folders/sample-s01-roc001-step1'],
-        ['S01', 'ROC-001', 2, 'Material Delivered',      'https://drive.google.com/drive/folders/sample-s01-roc001-step2'],
-        ['S02', 'ROC-002', 1, 'Material PO Issued',      'https://drive.google.com/drive/folders/sample-s02-roc002-step1'],
-        ['S02', 'ROC-002', 2, 'Equipment Installation',  'https://drive.google.com/drive/folders/sample-s02-roc002-step2'],
-        ['E01', 'ROC-003', 1, 'Shop Drawing Approved',   'https://drive.google.com/drive/folders/sample-e01-roc003-step1'],
-        ['A01', 'ROC-004', 2, 'Area Released',           'https://drive.google.com/drive/folders/sample-a01-roc004-step2'],
-      ];
-      const dataWs = XLSX.utils.aoa_to_sheet(dataAoa);
-      dataWs['!cols'] = [
-        { wch: 24 },
-        { wch: 16 },
-        { wch: 14 },
-        { wch: 32 },
-        { wch: 60 },
-      ];
-      XLSX.utils.book_append_sheet(wb, dataWs, 'DrawingLinks_Import');
-
       const dateStr = new Date().toISOString().slice(0, 10);
-      XLSX.writeFile(wb, `Drawing-Links-Import-Template-${dateStr}.xlsx`);
-      toast.success('Drawing Links import template downloaded');
+      await downloadXlsx([
+        {
+          // Sheet 1: DrawingLinks_Import (data sheet)
+          name: 'DrawingLinks_Import',
+          aoa: [
+            ['Required. Max 50 characters.', 'Required. Max 100 characters. ', 'Required. Max 50 characters. ', 'Optional. Max 500 characters.', 'Required. Max 100 characters. (Add secure https:/ links)'],
+            ['Trade Package Code*', 'ROC ID*', 'Step Number*', 'Step Name*', 'Drawing Folder Link*'],
+            ['S01', 'ROC-001', 1, 'Material PO Issued',      'https://drive.google.com/drive/folders/sample-s01-roc001-step1'],
+            ['S01', 'ROC-001', 2, 'Material Delivered',      'https://drive.google.com/drive/folders/sample-s01-roc001-step2'],
+            ['S02', 'ROC-002', 1, 'Material PO Issued',      'https://drive.google.com/drive/folders/sample-s02-roc002-step1'],
+            ['S02', 'ROC-002', 2, 'Equipment Installation',  'https://drive.google.com/drive/folders/sample-s02-roc002-step2'],
+            ['E01', 'ROC-003', 1, 'Shop Drawing Approved',   'https://drive.google.com/drive/folders/sample-e01-roc003-step1'],
+            ['A01', 'ROC-004', 2, 'Area Released',           'https://drive.google.com/drive/folders/sample-a01-roc004-step2'],
+          ],
+          cols: [{ wch: 24 }, { wch: 14 }, { wch: 14 }, { wch: 32 }, { wch: 65 }],
+        },
+        {
+          // Sheet 2: Instructions
+          name: 'Instructions',
+          aoa: [
+            ['How to use this template'],
+            [''],
+            ['1. One row = one step of one ROC under one Trade Package (SCode).'],
+            ['2. All tasks with the same SCode + ROC automatically share these links in reports. No per-task entry needed.'],
+            ['3. Delete the sample rows (S01, S02, S03) before importing your real data. The links in the sample are placeholders.'],
+            [''],
+            ['Column guide'],
+            ['Trade Package (SCode): must match a Trade Package already set up in the project. Mandatory.'],
+            ['ROC ID: must match a ROC already selected in the project. Mandatory.'],
+            ['Step No.: step number (order) within that ROC, as configured in the project. Mandatory. Matching is done on this column.'],
+            ['Step Name: for your reference only. It is not used for matching and is ignored on import.'],
+            ['Drawing Folder Link: Google Drive folder URL, must start with https://. Mandatory.'],
+            [''],
+            ['Validation on import'],
+            ['- SCode or ROC not part of the project: row rejected with row number.'],
+            ['- Step number does not exist in that ROC: row rejected.'],
+            ['- Duplicate SCode + ROC + Step No. combination: row rejected.'],
+            ['- Invalid link or link not starting with https://: row rejected.'],
+            ['- A ROC with only some steps linked is allowed. Unlinked steps stay blank in reports.'],
+            ['- Valid rows import even if some rows fail. Download the error report, fix, and re-upload.'],
+            [''],
+            ['Sample data note'],
+            ['S02 and S03 both use ROC-002 but have different links, to show that the same ROC under a different SCode gets its own links.'],
+          ],
+          cols: [{ wch: 110 }],
+        },
+      ], `Step-Links-Import-Template-${dateStr}.xlsx`);
+      toast.success('Import template downloaded');
     } catch {
       toast.error('Failed to download template');
     }
@@ -112,18 +123,22 @@ export default function DrawingLinksImportModal({
       const buffer = await file.arrayBuffer();
       const wb = XLSX.read(buffer, { type: 'array' });
 
-      // Check for expected sheet
-      if (!wb.SheetNames.includes('DrawingLinks_Import')) {
+      // Check for expected sheet — accept both naming conventions
+      const dataSheetName = wb.SheetNames.find(n =>
+        n === 'Step Links' || n === 'DrawingLinks_Import'
+      );
+      if (!dataSheetName) {
         setStep('invalid-template');
         return;
       }
 
-      const ws = wb.Sheets['DrawingLinks_Import'];
+      const ws = wb.Sheets[dataSheetName];
       const raw: string[][] = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' }) as string[][];
 
-      // Find header row (row with 'Trade Package Code*')
+      // Find header row (row with 'Trade Package' in first column, skip the "Required." hint row)
       const headerRowIdx = raw.findIndex(r =>
-        r.some(cell => typeof cell === 'string' && cell.includes('Trade Package Code')),
+        r.some(cell => typeof cell === 'string' && (cell.includes('Trade Package') || cell.includes('SCode')))
+        && !r[0].toString().startsWith('Required')
       );
       if (headerRowIdx === -1) {
         setStep('invalid-template');
@@ -146,9 +161,9 @@ export default function DrawingLinksImportModal({
         if (!rocId)    errors.push('ROC ID is required');
         if (!stepNum || isNaN(Number(stepNum)) || Number(stepNum) < 1)
           errors.push('Step Number must be a positive integer');
-        if (!stepName) errors.push('Step Name is required');
+        // Step Name is optional — not used for matching
         if (!link || (!link.startsWith('http://') && !link.startsWith('https://')))
-          errors.push('Drawing Folder Link must be a valid URL');
+          errors.push('Drawing Folder Link must start with https://');
 
         const key = `${tpCode}|${rocId}|${stepNum}`;
         if (seen.has(key)) {
@@ -426,10 +441,10 @@ export default function DrawingLinksImportModal({
               {/* Preview table */}
               <div style={{ border: '1px solid #E5E7EB', borderRadius: '8px', overflow: 'hidden' }}>
                 <div style={{ maxHeight: '400px', overflowY: 'auto', overflowX: 'auto' }}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '800px' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '700px' }}>
                     <thead style={{ position: 'sticky', top: 0, backgroundColor: '#F3F6FA', zIndex: 10 }}>
                       <tr>
-                        {['Row', 'Trade Package Code', 'ROC ID', 'Step No.', 'Step Name', 'Drawing Folder Link', 'Status', 'Result'].map(h => (
+                        {['Row', 'Trade Package Code', 'ROC ID', 'Step No.', 'Step Name', 'Drawing Folder Link', 'Result'].map(h => (
                           <th key={h} style={{
                             padding: '12px', textAlign: 'left', fontSize: '13px',
                             fontWeight: '600', color: '#272721', borderBottom: '1px solid #E5E7EB',
@@ -451,7 +466,6 @@ export default function DrawingLinksImportModal({
                               {record.drawingFolderLink || '—'}
                             </a>
                           </td>
-                          <td style={{ padding: '12px', fontSize: '13px', color: '#272721', borderBottom: '1px solid #E5E7EB' }}>{record.status}</td>
                           <td style={{ padding: '12px', fontSize: '13px', borderBottom: '1px solid #E5E7EB' }}>
                             {record.isValid ? (
                               <span style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#15803D' }}>
