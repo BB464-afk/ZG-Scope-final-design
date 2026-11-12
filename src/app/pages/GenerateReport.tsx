@@ -5,6 +5,7 @@ import { Calendar, TrendingUp, DollarSign, Package, Download, Save, FileText, Tr
 import { toast } from 'sonner';
 import StandardDropdown from '../components/StandardDropdown';
 import { formatDate } from '../components/EnterpriseTable';
+import { generateActivityTaskReportExcel, generateActivityTaskReportNonConsolidated } from '../utils/generateActivityTaskReport';
 
 type ReportTab = 'manhours' | 'cost' | 'quantity';
 type GroupByOption = 'area' | 'discipline' | 'tradePackage' | 'subcontractor' | 'spa' | 'roc' | 'costType' | 'scope' | 'costCode' | 'tasks';
@@ -2354,7 +2355,29 @@ export default function GenerateReport() {
             marginBottom: '16px'
           }}>
             <button
-              onClick={() => toast.success('Report downloaded successfully')}
+              onClick={() => {
+                try {
+                  if (filters.groupBy === 'tasks') {
+                    // Non-consolidated: one sheet per ROC, step names as column headers with hyperlinks
+                    generateActivityTaskReportNonConsolidated(
+                      filters.startDate,
+                      filters.endDate,
+                      'Period Progress Only',
+                    );
+                  } else {
+                    // Consolidated: single sheet, all tasks
+                    generateActivityTaskReportExcel(
+                      filters.startDate,
+                      filters.endDate,
+                      'Period Progress Only',
+                      'Consolidated',
+                    );
+                  }
+                  toast.success('Activity-Task Report downloaded successfully');
+                } catch (err) {
+                  toast.error('Failed to generate report. Please try again.');
+                }
+              }}
               style={{
                 height: '36px',
                 padding: '0 16px',

@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useParams } from "react-router";
 import { toast } from "sonner";
+import DrawingLinksImportModal from "../components/DrawingLinksImportModal";
 
 interface DrawingLinkRecord {
   id: number;
@@ -296,6 +297,7 @@ export default function DrawingLinks() {
   const isProjectReadOnly = projectId === "5";
   const [records, setRecords] = useState(INITIAL_LINKS);
   const [showModal, setShowModal] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [selectedTradePackage, setSelectedTradePackage] = useState("");
   const [selectedRoc, setSelectedRoc] = useState("");
@@ -502,12 +504,53 @@ export default function DrawingLinks() {
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <button
             title="Download Template"
-            onClick={() => {
-              downloadCsv("drawing-links-template.csv", [
-                ["Trade Package Code", "ROC ID", "Step Number", "Drawing Folder Link"],
-                ["S01", "ROC-001", "1", "https://"],
-              ]);
-              toast.success("Drawing links template downloaded");
+            onClick={async () => {
+              try {
+                const XLSX = await import('xlsx');
+                const wb = XLSX.utils.book_new();
+
+                // Instructions sheet
+                const instrAoa = [
+                  [''],
+                  ['Drawing Links Import Template – Instructions'],
+                  ['Do not modify the sheet name or column headers.'],
+                  ['Fill data only in the DrawingLinks_Import sheet.'],
+                  ['Fields marked with * are mandatory.'],
+                  ['Trade Package Code is required (e.g. S01, E01, A01).'],
+                  ['ROC ID is required (e.g. ROC-001).'],
+                  ['Step Number is required and must be a positive integer.'],
+                  ['Step Name is required (e.g. Material PO Issued).'],
+                  ['Drawing Folder Link is required and must be a valid URL.'],
+                  ['Duplicate Trade Package Code + ROC ID + Step Number combinations are not allowed.'],
+                  ['Import supports new record creation only.'],
+                  ['Upload only .xlsx format.'],
+                  ['After upload, the system will show row-level preview results.'],
+                ];
+                const instrWs = XLSX.utils.aoa_to_sheet(instrAoa);
+                instrWs['!cols'] = [{ wch: 80 }];
+                XLSX.utils.book_append_sheet(wb, instrWs, 'Instructions');
+
+                // Data sheet
+                const dataAoa = [
+                  ['Required. Trade Package Code (e.g. S01).','Required. ROC ID (e.g. ROC-001).','Required. Positive integer (e.g. 1).','Required. Step name (e.g. Material PO Issued).','Required. Full URL to drawing folder.'],
+                  ['Trade Package Code*','ROC ID*','Step Number*','Step Name*','Drawing Folder Link*'],
+                  ['S01','ROC-001',1,'Material PO Issued','https://drive.google.com/drive/folders/sample-s01-roc001-step1'],
+                  ['S01','ROC-001',2,'Material Delivered','https://drive.google.com/drive/folders/sample-s01-roc001-step2'],
+                  ['S02','ROC-002',1,'Material PO Issued','https://drive.google.com/drive/folders/sample-s02-roc002-step1'],
+                  ['S02','ROC-002',2,'Equipment Installation','https://drive.google.com/drive/folders/sample-s02-roc002-step2'],
+                  ['E01','ROC-003',1,'Shop Drawing Approved','https://drive.google.com/drive/folders/sample-e01-roc003-step1'],
+                  ['A01','ROC-004',2,'Area Released','https://drive.google.com/drive/folders/sample-a01-roc004-step2'],
+                ];
+                const dataWs = XLSX.utils.aoa_to_sheet(dataAoa);
+                dataWs['!cols'] = [{ wch: 24 },{ wch: 16 },{ wch: 14 },{ wch: 32 },{ wch: 60 }];
+                XLSX.utils.book_append_sheet(wb, dataWs, 'DrawingLinks_Import');
+
+                const dateStr = new Date().toISOString().slice(0, 10);
+                XLSX.writeFile(wb, `Drawing-Links-Import-Template-${dateStr}.xlsx`);
+                toast.success("Drawing Links import template downloaded");
+              } catch {
+                toast.error("Failed to download template");
+              }
             }}
             style={actionButtonStyle}
           >
@@ -516,7 +559,7 @@ export default function DrawingLinks() {
           <button
             title="Import From Excel"
             disabled={isProjectReadOnly}
-            onClick={() => importInputRef.current?.click()}
+            onClick={() => !isProjectReadOnly && setShowImportModal(true)}
             style={{
               ...actionButtonStyle,
               opacity: isProjectReadOnly ? 0.5 : 1,
@@ -1111,6 +1154,28 @@ export default function DrawingLinks() {
           </div>
         </div>
       )}
+
+      {/* Drawing Links Import Modal */}
+      <DrawingLinksImportModal
+        isOpen={showImportModal}
+        onClose={() => setShowImportModal(false)}
+        onImport={(validRecords) => {
+          const nextId = Math.max(0, ...records.map(r => r.id)) + 1;
+          const newLinks = validRecords.map((rec, i) => ({
+            id: nextId + i,
+            tradePackageCode: rec.tradePackageCode,
+            tradePackageName: rec.tradePackageCode,
+            rocId: rec.rocId,
+            stepNumber: Number(rec.stepNumber),
+            stepName: rec.stepName,
+            drawingFolderLink: rec.drawingFolderLink,
+            updatedBy: 'Import',
+            updatedOn: new Date().toISOString().slice(0, 10),
+          }));
+          setRecords(prev => [...prev, ...newLinks]);
+          setShowImportModal(false);
+        }}
+      />
     </div>
   );
 }
