@@ -15,8 +15,31 @@ import {
   Filter,
   X,
   Archive,
-  ShieldCheck
+  ShieldCheck,
+  FolderOpen
 } from 'lucide-react';
+
+// ── Shared Drawing Links data (mirrors DrawingLinks.tsx INITIAL_LINKS) ─────────
+interface DrawingLinkRecord {
+  id: number;
+  tradePackageCode: string;
+  tradePackageName: string;
+  rocId: string;
+  stepNumber: number;
+  stepName: string;
+  drawingFolderLink: string;
+  updatedBy: string;
+  updatedOn: string;
+}
+
+const ALL_DRAWING_LINKS: DrawingLinkRecord[] = [
+  { id: 1, tradePackageCode: 'S01', tradePackageName: 'Structural Steel',    rocId: 'ROC-001', stepNumber: 1, stepName: 'Material PO Issued',  drawingFolderLink: 'https://drive.google.com/folders/S01-ROC001-STEP1', updatedBy: 'Manali Ruchandani', updatedOn: '03/11/2026 10:10 AM' },
+  { id: 2, tradePackageCode: 'S01', tradePackageName: 'Structural Steel',    rocId: 'ROC-001', stepNumber: 2, stepName: 'Material Delivered',    drawingFolderLink: 'https://drive.google.com/folders/S01-ROC001-STEP2', updatedBy: 'Bhoomi Barot',      updatedOn: '03/11/2026 10:11 AM' },
+  { id: 3, tradePackageCode: 'S01', tradePackageName: 'Structural Steel',    rocId: 'ROC-001', stepNumber: 3, stepName: 'Installation',           drawingFolderLink: 'https://drive.google.com/folders/S01-ROC001-STEP3', updatedBy: 'Manali Ruchandani', updatedOn: '03/11/2026 10:12 AM' },
+  { id: 4, tradePackageCode: 'S01', tradePackageName: 'Structural Steel',    rocId: 'ROC-001', stepNumber: 4, stepName: 'Testing',                drawingFolderLink: 'https://drive.google.com/folders/S01-ROC001-STEP4', updatedBy: 'Bhoomi Barot',      updatedOn: '03/11/2026 10:13 AM' },
+  { id: 5, tradePackageCode: 'S02', tradePackageName: 'Mechanical Services', rocId: 'ROC-002', stepNumber: 1, stepName: 'Material PO Issued',    drawingFolderLink: 'https://drive.google.com/folders/S02-ROC002-STEP1', updatedBy: 'Manali Ruchandani', updatedOn: '03/11/2026 10:14 AM' },
+  { id: 6, tradePackageCode: 'S02', tradePackageName: 'Mechanical Services', rocId: 'ROC-002', stepNumber: 2, stepName: 'Material Delivered',     drawingFolderLink: 'https://drive.google.com/folders/S02-ROC002-STEP2', updatedBy: 'Bhoomi Barot',      updatedOn: '03/11/2026 10:15 AM' },
+];
 
 interface Attachment {
   id: number;
@@ -56,6 +79,8 @@ interface AttachmentsTabContentProps {
   selectedStepForAttachment: string;
   setSelectedStepForAttachment: (step: string) => void;
   isProjectReadOnly?: boolean;
+  tradePackageCode?: string; // e.g. 'S02'
+  rocId?: string;            // e.g. 'ROC-002'
 }
 
 export const AttachmentsTabContent: React.FC<AttachmentsTabContentProps> = ({
@@ -68,10 +93,18 @@ export const AttachmentsTabContent: React.FC<AttachmentsTabContentProps> = ({
   setShowAddLinkModal,
   selectedStepForAttachment,
   setSelectedStepForAttachment,
-  isProjectReadOnly = false
+  isProjectReadOnly = false,
+  tradePackageCode = '',
+  rocId = '',
 }) => {
   const [filesExpanded, setFilesExpanded] = useState(true);
   const [linksExpanded, setLinksExpanded] = useState(true);
+  const [drawingLinksExpanded, setDrawingLinksExpanded] = useState(true);
+
+  // Drawing links for this task (matched by tradePackageCode + rocId)
+  const taskDrawingLinks = ALL_DRAWING_LINKS.filter(
+    l => l.tradePackageCode === tradePackageCode && l.rocId === rocId
+  );
   
   // Bulk selection state
   const [selectedFiles, setSelectedFiles] = useState<number[]>([]);
@@ -1355,6 +1388,185 @@ export const AttachmentsTabContent: React.FC<AttachmentsTabContentProps> = ({
                 <LinkIcon size={32} style={{ color: '#D1D5DB', margin: '0 auto 8px' }} />
                 <p style={{ fontSize: '12px', color: '#9CA3AF', margin: 0 }}>
                   No links yet
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* ── DRAWING LINKS SECTION ── */}
+          <div style={{ marginTop: '24px' }}>
+            {/* Section header — same style as BIM Links */}
+            <div
+              onClick={() => setDrawingLinksExpanded(!drawingLinksExpanded)}
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '12px',
+                cursor: 'pointer',
+                padding: '8px 12px',
+                backgroundColor: '#F9FAFB',
+                borderRadius: '6px',
+                border: '1px solid #E5E7EB',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                {drawingLinksExpanded
+                  ? <ChevronUp size={16} style={{ color: '#6B7280' }} />
+                  : <ChevronDown size={16} style={{ color: '#6B7280' }} />}
+                <h3 style={{ fontSize: '14px', fontWeight: '600', color: '#111827', margin: 0 }}>
+                  Drawing Folder Links ({taskDrawingLinks.length})
+                </h3>
+                {tradePackageCode && rocId && (
+                  <span style={{
+                    fontSize: '11px',
+                    backgroundColor: '#E4EEF8',
+                    color: '#1F4B8E',
+                    padding: '2px 8px',
+                    borderRadius: '10px',
+                    fontWeight: '500',
+                  }}>
+                    {tradePackageCode} · {rocId}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {drawingLinksExpanded && taskDrawingLinks.length > 0 && (
+              <div style={{
+                backgroundColor: '#FFFFFF',
+                border: '1px solid #C8D9EE',
+                borderRadius: '4px',
+                overflow: 'hidden',
+              }}>
+                {/* Table header — same grid as BIM Links table */}
+                <div style={{
+                  backgroundColor: '#E4EEF8',
+                  display: 'grid',
+                  gridTemplateColumns: '60px 200px 1fr 150px 150px 100px',
+                  borderBottom: '1px solid #C8D9EE',
+                  height: '40px',
+                  alignItems: 'center',
+                }}>
+                  {['Step No.', 'Step Name', 'Drawing Folder Link', 'Updated By', 'Updated On', ''].map(h => (
+                    <div key={h} style={{
+                      padding: '0 12px',
+                      fontSize: '13px',
+                      fontWeight: '600',
+                      color: '#272721',
+                    }}>{h}</div>
+                  ))}
+                </div>
+
+                {/* Rows */}
+                {taskDrawingLinks.map((dl, idx) => (
+                  <div
+                    key={dl.id}
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: '60px 200px 1fr 150px 150px 100px',
+                      borderBottom: idx < taskDrawingLinks.length - 1 ? '1px solid #E2E6ED' : 'none',
+                      alignItems: 'center',
+                      minHeight: '52px',
+                      backgroundColor: '#FFFFFF',
+                    }}
+                  >
+                    {/* Step No */}
+                    <div style={{ padding: '10px 12px', fontSize: '13px', fontWeight: '600', color: '#374151' }}>
+                      {dl.stepNumber}
+                    </div>
+                    {/* Step Name */}
+                    <div style={{ padding: '10px 12px', fontSize: '13px', color: '#272721', fontWeight: '500' }}>
+                      {dl.stepName}
+                    </div>
+                    {/* Link */}
+                    <div style={{ padding: '10px 12px', minWidth: 0, overflow: 'hidden' }}>
+                      <a
+                        href={dl.drawingFolderLink}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{
+                          color: '#2563EB',
+                          textDecoration: 'underline',
+                          fontSize: '13px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {dl.drawingFolderLink.replace('https://drive.google.com/folders/', 'drive.google.com/...')}
+                        </span>
+                        <ExternalLink size={11} style={{ flexShrink: 0 }} />
+                      </a>
+                    </div>
+                    {/* Updated By */}
+                    <div style={{ padding: '10px 12px', fontSize: '12px', color: '#6B7280' }}>
+                      {dl.updatedBy}
+                    </div>
+                    {/* Updated On */}
+                    <div style={{ padding: '10px 12px', fontSize: '12px', color: '#6B7280' }}>
+                      {dl.updatedOn}
+                    </div>
+                    {/* Open button */}
+                    <div style={{ padding: '10px 12px' }}>
+                      <a
+                        href={dl.drawingFolderLink}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          height: '28px',
+                          padding: '0 10px',
+                          backgroundColor: '#FFFFFF',
+                          border: '1px solid #2563EB',
+                          borderRadius: '4px',
+                          fontSize: '12px',
+                          fontWeight: '500',
+                          color: '#2563EB',
+                          textDecoration: 'none',
+                          whiteSpace: 'nowrap',
+                        }}
+                        onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#EFF6FF'; }}
+                        onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.backgroundColor = '#FFFFFF'; }}
+                      >
+                        <ExternalLink size={12} />
+                        Open
+                      </a>
+                    </div>
+                  </div>
+                ))}
+
+                {/* Footer — same as BIM Links */}
+                <div style={{
+                  height: '44px',
+                  backgroundColor: '#FAFBFC',
+                  borderTop: '1px solid #C8D9EE',
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '0 16px',
+                  fontSize: '13px',
+                  color: '#5F6B7A',
+                }}>
+                  Total Records: {taskDrawingLinks.length}
+                </div>
+              </div>
+            )}
+
+            {drawingLinksExpanded && taskDrawingLinks.length === 0 && (
+              <div style={{
+                backgroundColor: '#F9FAFB',
+                border: '2px dashed #D1D5DB',
+                borderRadius: '6px',
+                padding: '24px 16px',
+                textAlign: 'center',
+              }}>
+                <FolderOpen size={32} style={{ color: '#D1D5DB', margin: '0 auto 8px' }} />
+                <p style={{ fontSize: '12px', color: '#9CA3AF', margin: 0 }}>
+                  No drawing folder links configured for this task's Trade Package + ROC combination
                 </p>
               </div>
             )}

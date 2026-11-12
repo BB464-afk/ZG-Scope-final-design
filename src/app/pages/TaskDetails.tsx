@@ -170,49 +170,49 @@ interface AuditLogItem {
 
 // Mock Data
 const MOCK_TASK_DATA = {
-  taskId: 'TASK-1733-2',
-  taskName: 'HVAC Installation – L2 – Zone B',
+  taskId: 'MYD-PH1-S19-005-02124',
+  taskName: 'MYD Power Distribution - S19 - MYD Modular MV Switchgear - Lift and Place (2)',
   status: 'In Progress',
-  phase: 'Fit-Out',
-  discipline: 'MEP',
-  tradePackage: 'TP-MEP-002',
-  subContractor: 'HVAC Systems Ltd',
-  deliveryPackage: 'DP-2024-002',
-  area: 'Zone B Level 2',
-  building: 'Building A',
-  tranche: 'Tranche 1',
-  spa: 'SPA-002',
-  costType: 'Capex',
-  costCode: 'A01.WP01.SPA01',
+  phase: '004 - Construction',
+  discipline: '005 - Electrical',
+  tradePackage: 'S19-A5000 - MYD Secondary Substation Electrical Assembly',
+  subContractor: '000-021 - HF Industrie',
+  deliveryPackage: 'CON03 - Fitout',
+  area: 'MYD - Mechanical Yard',
+  building: 'MYD - Mechanical Yard',
+  tranche: 'T1 - Tranche 1',
+  spa: 'S19 - MYD Secondary Substation',
+  costType: '50 - Assembly',
+  costCode: 'MYD.PH1.CON03.S19.50',
   completionPercent: 65,
   progressChange: 12,
-  lastUpdatedBy: 'Mike Chen',
+  lastUpdatedBy: 'Bogdan-Constantin Pana',
   lastUpdatedDays: 1,
   scheduleStatus: 'On Track',
   costStatus: 'Under Budget',
   productivityTrend: 8,
-  earnedCost: 3200,
-  installedQuantity: 290,
-  earnedHours: 14,
-  budgetedCost: 6500,
-  totalQuantity: 450,
-  budgetedManHours: 28,
-  reporter: 'Mike Chen',
+  earnedCost: 10067,
+  installedQuantity: 0.07,
+  earnedHours: 39,
+  budgetedCost: 15488.71,
+  totalQuantity: 0.10,
+  budgetedManHours: 60,
+  reporter: 'Bogdan-Constantin Pana',
   role: 'Contributor',
-  estimatedBudgetHours: 24,
-  estimatedBudgetCost: 5500,
-  approvedChanges: 4,
-  approvedChangesCost: 1000,
-  currentBudgetHours: 28,
-  currentBudgetCost: 6500,
-  remainingHours: 10,
-  remainingValue: 2800,
-  baselineStart: '01/02/2024',
-  baselineFinish: '24/03/2024',
-  totalQuantityToInstall: 450,
-  actualStart: '04/02/2024',
+  estimatedBudgetHours: 60,
+  estimatedBudgetCost: 15488.71,
+  approvedChanges: 0,
+  approvedChangesCost: 0,
+  currentBudgetHours: 60,
+  currentBudgetCost: 15488.71,
+  remainingHours: 21,
+  remainingValue: 5421.71,
+  baselineStart: '01/10/2026',
+  baselineFinish: '30/11/2026',
+  totalQuantityToInstall: 0.10,
+  actualStart: '03/11/2026',
   actualFinish: '—',
-  quantityInstalled: 290
+  quantityInstalled: 0.07
 };
 
 const MOCK_ROC_STEPS: ROCStep[] = [
@@ -1142,33 +1142,7 @@ const TaskDetails: React.FC = () => {
                           {step.stepNumber}
                         </td>
                         <td style={{ textAlign: 'left' }}>
-                          {step.drawingLink ? (
-                            <a
-                              href={step.drawingLink}
-                              target="_blank"
-                              rel="noreferrer"
-                              onClick={(e) => e.stopPropagation()}
-                              style={{
-                                fontWeight: '500',
-                                color: '#2563EB',
-                                textDecoration: 'none',
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '5px'
-                              }}
-                              onMouseEnter={(e) => {
-                                (e.currentTarget as HTMLAnchorElement).style.textDecoration = 'underline';
-                              }}
-                              onMouseLeave={(e) => {
-                                (e.currentTarget as HTMLAnchorElement).style.textDecoration = 'none';
-                              }}
-                            >
-                              {step.stepName}
-                              <ExternalLink size={12} style={{ flexShrink: 0 }} />
-                            </a>
-                          ) : (
-                            <span style={{ fontWeight: '500' }}>{step.stepName}</span>
-                          )}
+                          <span style={{ fontWeight: '500' }}>{step.stepName}</span>
                         </td>
                         <td style={{ textAlign: 'center', color: '#6B7280' }}>{step.stepWeightage}%</td>
                         <td style={{ textAlign: 'center' }}>
@@ -1495,6 +1469,8 @@ const TaskDetails: React.FC = () => {
             selectedStepForAttachment={selectedStepForAttachment}
             setSelectedStepForAttachment={setSelectedStepForAttachment}
             isProjectReadOnly={isProjectReadOnly}
+            tradePackageCode="S02"
+            rocId="ROC-002"
           />
         )
       )}
