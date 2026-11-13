@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router';
 import StandardDropdown from '../components/StandardDropdown';
-import { 
+import {
   ChevronDown,
   ChevronRight,
   Download,
@@ -216,32 +216,32 @@ const MOCK_TASK_DATA = {
 };
 
 const MOCK_ROC_STEPS: ROCStep[] = [
-  { 
-    id: 1, 
+  {
+    id: 1,
     stepNumber: '1.1',
-    stepName: 'Site Preparation', 
-    stepWeightage: 15, 
-    measurementType: 'Quantity', 
-    totalQuantity: 2000, 
-    installedQuantity: 1500, 
-    percentComplete: 75, 
-    expanded: false, 
-    evidenceCount: 2, 
+    stepName: 'Site Preparation',
+    stepWeightage: 15,
+    measurementType: 'Quantity',
+    totalQuantity: 2000,
+    installedQuantity: 1500,
+    percentComplete: 75,
+    expanded: false,
+    evidenceCount: 2,
     status: 'in-progress',
     hasSubSteps: false,
     drawingLink: 'https://drive.google.com/folders/S02-ROC002-STEP1'
   },
-  { 
-    id: 2, 
+  {
+    id: 2,
     stepNumber: '1.2',
-    stepName: 'Foundation Work', 
-    stepWeightage: 25, 
-    measurementType: 'Percentage', 
-    totalQuantity: null, 
-    installedQuantity: null, 
-    percentComplete: 42, 
-    expanded: false, 
-    evidenceCount: 5, 
+    stepName: 'Foundation Work',
+    stepWeightage: 25,
+    measurementType: 'Percentage',
+    totalQuantity: null,
+    installedQuantity: null,
+    percentComplete: 42,
+    expanded: false,
+    evidenceCount: 5,
     status: 'in-progress',
     hasSubSteps: true,
     drawingLink: 'https://drive.google.com/folders/S02-ROC002-STEP2',
@@ -281,46 +281,46 @@ const MOCK_ROC_STEPS: ROCStep[] = [
       }
     ]
   },
-  { 
-    id: 3, 
+  {
+    id: 3,
     stepNumber: '1.3',
-    stepName: 'Structural Steel Erection', 
-    stepWeightage: 30, 
-    measurementType: 'Quantity', 
-    totalQuantity: 1500, 
-    installedQuantity: 1500, 
-    percentComplete: 100, 
-    expanded: false, 
-    evidenceCount: 3, 
+    stepName: 'Structural Steel Erection',
+    stepWeightage: 30,
+    measurementType: 'Quantity',
+    totalQuantity: 1500,
+    installedQuantity: 1500,
+    percentComplete: 100,
+    expanded: false,
+    evidenceCount: 3,
     status: 'completed',
     hasSubSteps: false,
     drawingLink: 'https://drive.google.com/folders/S02-ROC002-STEP3'
   },
-  { 
-    id: 4, 
+  {
+    id: 4,
     stepNumber: '1.4',
-    stepName: 'Concrete Pouring', 
-    stepWeightage: 20, 
-    measurementType: 'Quantity', 
-    totalQuantity: 500, 
-    installedQuantity: 400, 
-    percentComplete: 80, 
-    expanded: false, 
-    evidenceCount: 4, 
+    stepName: 'Concrete Pouring',
+    stepWeightage: 20,
+    measurementType: 'Quantity',
+    totalQuantity: 500,
+    installedQuantity: 400,
+    percentComplete: 80,
+    expanded: false,
+    evidenceCount: 4,
     status: 'in-progress',
     hasSubSteps: false
   },
-  { 
-    id: 5, 
+  {
+    id: 5,
     stepNumber: '1.5',
-    stepName: 'Finishing Works', 
-    stepWeightage: 10, 
-    measurementType: 'Percentage', 
-    totalQuantity: null, 
-    installedQuantity: null, 
-    percentComplete: 35, 
-    expanded: false, 
-    evidenceCount: 1, 
+    stepName: 'Finishing Works',
+    stepWeightage: 10,
+    measurementType: 'Percentage',
+    totalQuantity: null,
+    installedQuantity: null,
+    percentComplete: 35,
+    expanded: false,
+    evidenceCount: 1,
     status: 'in-progress',
     hasSubSteps: false
   }
@@ -685,7 +685,7 @@ const TaskDetails: React.FC = () => {
   };
 
   const toggleAuditLog = (logId: number) => {
-    setAuditLogs(prev => prev.map(log => 
+    setAuditLogs(prev => prev.map(log =>
       log.id === logId ? { ...log, expanded: !log.expanded } : log
     ));
   };
@@ -898,7 +898,7 @@ const TaskDetails: React.FC = () => {
         }}>
           {/* LEFT COLUMN - MAIN CONTENT */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            
+
             {/* TWO-COLUMN LAYOUT: PROGRESS OVERVIEW & CODING DIMENSIONS */}
             <div style={{
               display: 'grid',
@@ -1092,8 +1092,8 @@ const TaskDetails: React.FC = () => {
               </h2>
 
               {/* AG Grid Style Table */}
-              <div style={{ 
-                border: '1px solid #C8D9EE', 
+              <div style={{
+                border: '1px solid #C8D9EE',
                 borderRadius: '4px',
                 overflow: 'auto',
                 overflowX: 'auto'
@@ -1119,7 +1119,7 @@ const TaskDetails: React.FC = () => {
                           {step.hasSubSteps && (
                             <button
                               onClick={() => {
-                                setRocSteps(rocSteps.map(s => 
+                                setRocSteps(rocSteps.map(s =>
                                   s.id === step.id ? { ...s, expanded: !s.expanded } : s
                                 ));
                               }}
@@ -1191,7 +1191,7 @@ const TaskDetails: React.FC = () => {
                         </td>
                       </tr>,
                       // Sub-Steps
-                      ...(step.hasSubSteps && step.expanded && step.subSteps 
+                      ...(step.hasSubSteps && step.expanded && step.subSteps
                         ? step.subSteps.map((subStep) => (
                           <tr key={`${step.id}-${subStep.id}`} style={{ backgroundColor: '#F9FAFB' }}>
                             <td></td>
@@ -1247,9 +1247,9 @@ const TaskDetails: React.FC = () => {
           </div>
 
           {/* RIGHT SIDEBAR - COLLAPSIBLE CONTEXT PANEL */}
-          <div style={{ 
-            display: 'flex', 
-            flexDirection: 'column', 
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
             gap: '10px',
             position: 'sticky',
             top: '80px',
@@ -1257,7 +1257,7 @@ const TaskDetails: React.FC = () => {
             maxHeight: 'calc(100vh - 100px)',
             overflowY: 'auto'
           }}>
-            
+
             {/* Task Context - Collapsible */}
             <div style={{
               backgroundColor: '#FFFFFF',
@@ -1265,7 +1265,7 @@ const TaskDetails: React.FC = () => {
               borderRadius: '6px',
               overflow: 'hidden'
             }}>
-              <div 
+              <div
                 onClick={() => toggleSidebarSection('context')}
                 style={{
                   padding: '12px 14px',
@@ -1310,7 +1310,7 @@ const TaskDetails: React.FC = () => {
               borderRadius: '6px',
               overflow: 'hidden'
             }}>
-              <div 
+              <div
                 onClick={() => toggleSidebarSection('budget')}
                 style={{
                   padding: '12px 14px',
@@ -1404,7 +1404,7 @@ const TaskDetails: React.FC = () => {
               borderRadius: '6px',
               overflow: 'hidden'
             }}>
-              <div 
+              <div
                 onClick={() => toggleSidebarSection('planning')}
                 style={{
                   padding: '12px 14px',
@@ -1469,7 +1469,7 @@ const TaskDetails: React.FC = () => {
             selectedStepForAttachment={selectedStepForAttachment}
             setSelectedStepForAttachment={setSelectedStepForAttachment}
             isProjectReadOnly={isProjectReadOnly}
-            tradePackageCode="S02"
+            tradePackageCode="S19-A5000"
             rocId="ROC-002"
           />
         )
@@ -1498,186 +1498,186 @@ const TaskDetails: React.FC = () => {
             rejectionNote: 'This version was auto-rejected by the system due to change in project status'
           };
         }
-        
+
         // Apply filters
         const filteredVersions = versionHistory
           .filter(v => v.version.toLowerCase().includes(versionSearch.toLowerCase()))
           .filter(v => v.status.toLowerCase().includes(statusSearch.toLowerCase()))
           .filter(v => v.submittedBy.toLowerCase().includes(submittedBySearch.toLowerCase()))
           .filter(v => v.submittedDate.includes(submittedDateSearch));
-        
+
         return (
           isTabHidden('versions') ? (
             <DesignInProgress />
           ) : (
-        <div style={{ padding: '24px 32px', maxWidth: '1200px', margin: '0 auto' }}>
-          <h2 style={{ fontSize: '18px', fontWeight: '600', color: '#111827', marginBottom: '24px' }}>
-            Version History
-          </h2>
+            <div style={{ padding: '24px 32px', maxWidth: '1200px', margin: '0 auto' }}>
+              <h2 style={{ fontSize: '18px', fontWeight: '600', color: '#111827', marginBottom: '24px' }}>
+                Version History
+              </h2>
 
-          {/* AG Grid Style Table */}
-          <div style={{ 
-            border: '1px solid #C8D9EE', 
-            borderRadius: '4px',
-            overflow: 'auto',
-            overflowX: 'auto'
-          }}>
-            <table className="ag-grid-table" style={{ width: '100%', minWidth: '900px' }}>
-              <thead>
-                <tr>
-                  <th style={{ textAlign: 'left', width: 'auto', whiteSpace: 'nowrap' }}>Version</th>
-                  <th style={{ textAlign: 'left', width: 'auto', whiteSpace: 'nowrap' }}>Status</th>
-                  <th style={{ textAlign: 'left', width: '50%' }}>Progress</th>
-                  <th style={{ textAlign: 'left', width: 'auto', whiteSpace: 'nowrap' }}>Submitted By</th>
-                  <th style={{ textAlign: 'left', width: 'auto', whiteSpace: 'nowrap' }}>Submitted Date</th>
-                </tr>
-              </thead>
-              
-              {/* Filter Row */}
-              <tbody>
-                <tr style={{ backgroundColor: '#FAFBFC' }}>
-                  <td style={{ height: '40px', padding: '6px 8px', width: 'auto' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <input
-                        type="text"
-                        placeholder="Filter..."
-                        value={versionSearch}
-                        onChange={(e) => setVersionSearch(e.target.value)}
-                        style={{
-                          width: '60px',
-                          height: '28px',
-                          border: '1px solid #D1D5DB',
-                          borderRadius: '3px',
-                          padding: '0 8px',
-                          fontSize: '12px',
-                          outline: 'none'
-                        }}
-                      />
-                      <Filter size={14} style={{ color: '#9CA3AF', flexShrink: 0 }} />
-                    </div>
-                  </td>
-                  <td style={{ height: '40px', padding: '6px 8px', width: 'auto' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <input
-                        type="text"
-                        placeholder="Filter..."
-                        value={statusSearch}
-                        onChange={(e) => setStatusSearch(e.target.value)}
-                        style={{
-                          width: '80px',
-                          height: '28px',
-                          border: '1px solid #D1D5DB',
-                          borderRadius: '3px',
-                          padding: '0 8px',
-                          fontSize: '12px',
-                          outline: 'none'
-                        }}
-                      />
-                      <Filter size={14} style={{ color: '#9CA3AF', flexShrink: 0 }} />
-                    </div>
-                  </td>
-                  <td style={{ height: '40px', padding: '6px 8px' }}>
-                    {/* No filter for Progress column */}
-                  </td>
-                  <td style={{ height: '40px', padding: '6px 8px', width: 'auto' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <input
-                        type="text"
-                        placeholder="Filter..."
-                        value={submittedBySearch}
-                        onChange={(e) => setSubmittedBySearch(e.target.value)}
-                        style={{
-                          width: '100px',
-                          height: '28px',
-                          border: '1px solid #D1D5DB',
-                          borderRadius: '3px',
-                          padding: '0 8px',
-                          fontSize: '12px',
-                          outline: 'none'
-                        }}
-                      />
-                      <Filter size={14} style={{ color: '#9CA3AF', flexShrink: 0 }} />
-                    </div>
-                  </td>
-                  <td style={{ height: '40px', padding: '6px 8px', width: 'auto' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <input
-                        type="text"
-                        placeholder="Filter..."
-                        value={submittedDateSearch}
-                        onChange={(e) => setSubmittedDateSearch(e.target.value)}
-                        style={{
-                          width: '100px',
-                          height: '28px',
-                          border: '1px solid #D1D5DB',
-                          borderRadius: '3px',
-                          padding: '0 8px',
-                          fontSize: '12px',
-                          outline: 'none'
-                        }}
-                      />
-                      <Filter size={14} style={{ color: '#9CA3AF', flexShrink: 0 }} />
-                    </div>
-                  </td>
-                </tr>
+              {/* AG Grid Style Table */}
+              <div style={{
+                border: '1px solid #C8D9EE',
+                borderRadius: '4px',
+                overflow: 'auto',
+                overflowX: 'auto'
+              }}>
+                <table className="ag-grid-table" style={{ width: '100%', minWidth: '900px' }}>
+                  <thead>
+                    <tr>
+                      <th style={{ textAlign: 'left', width: 'auto', whiteSpace: 'nowrap' }}>Version</th>
+                      <th style={{ textAlign: 'left', width: 'auto', whiteSpace: 'nowrap' }}>Status</th>
+                      <th style={{ textAlign: 'left', width: '50%' }}>Progress</th>
+                      <th style={{ textAlign: 'left', width: 'auto', whiteSpace: 'nowrap' }}>Submitted By</th>
+                      <th style={{ textAlign: 'left', width: 'auto', whiteSpace: 'nowrap' }}>Submitted Date</th>
+                    </tr>
+                  </thead>
 
-                {/* Data Rows */}
-                {filteredVersions.map((version) => (
-                  <tr 
-                    key={version.id}
-                    onClick={() => navigate(`/app/projects/${projectId}/tasks/${taskId}/versions/${version.id}`)}
-                    style={{ cursor: 'pointer' }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = '#F9FAFB';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = '';
-                    }}
-                  >
-                    <td style={{ textAlign: 'left' }}>
-                      <span style={{ fontWeight: '600' }}>{version.version}</span>
-                    </td>
-                    <td style={{ textAlign: 'left' }}>
-                      {getVersionStatusBadge(version.status)}
-                    </td>
-                    <td>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <div style={{
-                          flex: 1,
-                          height: '8px',
-                          backgroundColor: '#F3F4F6',
-                          borderRadius: '4px',
-                          overflow: 'hidden'
-                        }}>
-                          <div style={{
-                            width: `${version.progressPercent}%`,
-                            height: '100%',
-                            backgroundColor: '#FD4314',
-                            borderRadius: '4px'
-                          }} />
+                  {/* Filter Row */}
+                  <tbody>
+                    <tr style={{ backgroundColor: '#FAFBFC' }}>
+                      <td style={{ height: '40px', padding: '6px 8px', width: 'auto' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <input
+                            type="text"
+                            placeholder="Filter..."
+                            value={versionSearch}
+                            onChange={(e) => setVersionSearch(e.target.value)}
+                            style={{
+                              width: '60px',
+                              height: '28px',
+                              border: '1px solid #D1D5DB',
+                              borderRadius: '3px',
+                              padding: '0 8px',
+                              fontSize: '12px',
+                              outline: 'none'
+                            }}
+                          />
+                          <Filter size={14} style={{ color: '#9CA3AF', flexShrink: 0 }} />
                         </div>
-                        <span style={{
-                          fontSize: '13px',
-                          fontWeight: '600',
-                          color: '#111827',
-                          minWidth: '45px'
-                        }}>
-                          {version.progressPercent}%
-                        </span>
-                      </div>
-                    </td>
-                    <td style={{ textAlign: 'left', color: '#6B7280' }}>
-                      {version.submittedBy}
-                    </td>
-                    <td style={{ textAlign: 'left', color: '#6B7280' }}>
-                      {version.submittedDate}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+                      </td>
+                      <td style={{ height: '40px', padding: '6px 8px', width: 'auto' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <input
+                            type="text"
+                            placeholder="Filter..."
+                            value={statusSearch}
+                            onChange={(e) => setStatusSearch(e.target.value)}
+                            style={{
+                              width: '80px',
+                              height: '28px',
+                              border: '1px solid #D1D5DB',
+                              borderRadius: '3px',
+                              padding: '0 8px',
+                              fontSize: '12px',
+                              outline: 'none'
+                            }}
+                          />
+                          <Filter size={14} style={{ color: '#9CA3AF', flexShrink: 0 }} />
+                        </div>
+                      </td>
+                      <td style={{ height: '40px', padding: '6px 8px' }}>
+                        {/* No filter for Progress column */}
+                      </td>
+                      <td style={{ height: '40px', padding: '6px 8px', width: 'auto' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <input
+                            type="text"
+                            placeholder="Filter..."
+                            value={submittedBySearch}
+                            onChange={(e) => setSubmittedBySearch(e.target.value)}
+                            style={{
+                              width: '100px',
+                              height: '28px',
+                              border: '1px solid #D1D5DB',
+                              borderRadius: '3px',
+                              padding: '0 8px',
+                              fontSize: '12px',
+                              outline: 'none'
+                            }}
+                          />
+                          <Filter size={14} style={{ color: '#9CA3AF', flexShrink: 0 }} />
+                        </div>
+                      </td>
+                      <td style={{ height: '40px', padding: '6px 8px', width: 'auto' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <input
+                            type="text"
+                            placeholder="Filter..."
+                            value={submittedDateSearch}
+                            onChange={(e) => setSubmittedDateSearch(e.target.value)}
+                            style={{
+                              width: '100px',
+                              height: '28px',
+                              border: '1px solid #D1D5DB',
+                              borderRadius: '3px',
+                              padding: '0 8px',
+                              fontSize: '12px',
+                              outline: 'none'
+                            }}
+                          />
+                          <Filter size={14} style={{ color: '#9CA3AF', flexShrink: 0 }} />
+                        </div>
+                      </td>
+                    </tr>
+
+                    {/* Data Rows */}
+                    {filteredVersions.map((version) => (
+                      <tr
+                        key={version.id}
+                        onClick={() => navigate(`/app/projects/${projectId}/tasks/${taskId}/versions/${version.id}`)}
+                        style={{ cursor: 'pointer' }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = '#F9FAFB';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = '';
+                        }}
+                      >
+                        <td style={{ textAlign: 'left' }}>
+                          <span style={{ fontWeight: '600' }}>{version.version}</span>
+                        </td>
+                        <td style={{ textAlign: 'left' }}>
+                          {getVersionStatusBadge(version.status)}
+                        </td>
+                        <td>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <div style={{
+                              flex: 1,
+                              height: '8px',
+                              backgroundColor: '#F3F4F6',
+                              borderRadius: '4px',
+                              overflow: 'hidden'
+                            }}>
+                              <div style={{
+                                width: `${version.progressPercent}%`,
+                                height: '100%',
+                                backgroundColor: '#FD4314',
+                                borderRadius: '4px'
+                              }} />
+                            </div>
+                            <span style={{
+                              fontSize: '13px',
+                              fontWeight: '600',
+                              color: '#111827',
+                              minWidth: '45px'
+                            }}>
+                              {version.progressPercent}%
+                            </span>
+                          </div>
+                        </td>
+                        <td style={{ textAlign: 'left', color: '#6B7280' }}>
+                          {version.submittedBy}
+                        </td>
+                        <td style={{ textAlign: 'left', color: '#6B7280' }}>
+                          {version.submittedDate}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           )
         );
       })()}
@@ -1687,538 +1687,538 @@ const TaskDetails: React.FC = () => {
         isTabHidden('audit') ? (
           <DesignInProgress />
         ) : (
-            <div style={{ padding: '24px 32px', maxWidth: '1200px', margin: '0 auto' }}>
-              {/* Filter Panel - Collapsible */}
-              <div style={{ position: 'relative', marginBottom: '24px', minHeight: auditFiltersExpanded ? 'auto' : '0' }}>
-                {/* Collapsed State - Icon Button on Right */}
-                {!auditFiltersExpanded && (
-                  <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '16px' }}>
-                    <button
-                      onClick={() => setAuditFiltersExpanded(true)}
-                      style={{
-                        padding: '10px',
-                        backgroundColor: '#FFFFFF',
-                        border: '1px solid #E5E7EB',
-                        borderRadius: '8px',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-                        transition: 'all 150ms ease'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#F9FAFB';
-                        e.currentTarget.style.borderColor = '#D1D5DB';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = '#FFFFFF';
-                        e.currentTarget.style.borderColor = '#E5E7EB';
-                      }}
-                      title="Show Filters"
-                    >
-                      <Filter size={18} color="#6B7280" />
-                    </button>
-                  </div>
-                )}
+          <div style={{ padding: '24px 32px', maxWidth: '1200px', margin: '0 auto' }}>
+            {/* Filter Panel - Collapsible */}
+            <div style={{ position: 'relative', marginBottom: '24px', minHeight: auditFiltersExpanded ? 'auto' : '0' }}>
+              {/* Collapsed State - Icon Button on Right */}
+              {!auditFiltersExpanded && (
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '16px' }}>
+                  <button
+                    onClick={() => setAuditFiltersExpanded(true)}
+                    style={{
+                      padding: '10px',
+                      backgroundColor: '#FFFFFF',
+                      border: '1px solid #E5E7EB',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                      transition: 'all 150ms ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#F9FAFB';
+                      e.currentTarget.style.borderColor = '#D1D5DB';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = '#FFFFFF';
+                      e.currentTarget.style.borderColor = '#E5E7EB';
+                    }}
+                    title="Show Filters"
+                  >
+                    <Filter size={18} color="#6B7280" />
+                  </button>
+                </div>
+              )}
 
-                {/* Expanded State - Full Filter Panel */}
-                {auditFiltersExpanded && (
-                  <div style={{
-                    backgroundColor: '#FFFFFF',
-                    border: '1px solid #E5E7EB',
-                    borderRadius: '8px',
-                    padding: '20px',
-                    transition: 'all 300ms ease'
-                  }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                      <h3 style={{ fontSize: '14px', fontWeight: '600', color: '#272721', letterSpacing: '0.5px' }}>
-                        FILTER LOGS
-                      </h3>
-                      <div style={{ display: 'flex', gap: '8px' }}>
-                        <button
-                          onClick={resetAuditFilters}
-                          style={{
-                            padding: '8px 16px',
-                            backgroundColor: '#FFFFFF',
-                            border: '1px solid #D1D5DB',
-                            borderRadius: '6px',
-                            fontSize: '13px',
-                            fontWeight: '500',
-                            color: '#374151',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '6px'
-                          }}
-                        >
-                          <RotateCcw size={14} />
-                          Reset All Filters
-                        </button>
-                        <button
-                          onClick={() => setAuditFiltersExpanded(false)}
-                          style={{
-                            padding: '8px 12px',
-                            backgroundColor: '#FFFFFF',
-                            border: '1px solid #D1D5DB',
-                            borderRadius: '6px',
-                            fontSize: '13px',
-                            fontWeight: '500',
-                            color: '#6B7280',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '4px'
-                          }}
-                          title="Collapse filters"
-                        >
-                          <ChevronRight size={16} />
-                        </button>
-                      </div>
-                    </div>
-
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
-                      {/* Module Name */}
-                      <div>
-                        <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#4B5563', marginBottom: '6px' }}>
-                          Module Name
-                        </label>
-                        <StandardDropdown
-                          options={[
-                            { value: 'All Modules', label: 'All Modules' },
-                            { value: 'Task Management', label: 'Task Management' },
-                            { value: 'Progress Tracking', label: 'Progress Tracking' }
-                          ]}
-                          value={auditModuleFilter}
-                          onChange={(value) => setAuditModuleFilter(value as string)}
-                          placeholder="Select module"
-                          mode="single"
-                          style={{ width: '100%' }}
-                        />
-                      </div>
-
-                      {/* Action Type */}
-                      <div>
-                        <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#4B5563', marginBottom: '6px' }}>
-                          Action Type
-                        </label>
-                        <StandardDropdown
-                          options={[
-                            { value: 'All Actions', label: 'All Actions' },
-                            { value: 'TASK_CREATE', label: 'TASK_CREATE' },
-                            { value: 'TASK_UPDATE', label: 'TASK_UPDATE' },
-                            { value: 'TASK_STATUS_CHANGE', label: 'TASK_STATUS_CHANGE' },
-                            { value: 'VERSION_CREATE', label: 'VERSION_CREATE' },
-                            { value: 'VERSION_STATUS_CHANGE', label: 'VERSION_STATUS_CHANGE' }
-                          ]}
-                          value={auditActionTypeFilter}
-                          onChange={(value) => setAuditActionTypeFilter(value as string)}
-                          placeholder="Select action type"
-                          mode="single"
-                          style={{ width: '100%' }}
-                        />
-                      </div>
-
-                      {/* Performed By */}
-                      <div>
-                        <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#4B5563', marginBottom: '6px' }}>
-                          Performed By
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="Search user..."
-                          value={auditPerformedByFilter}
-                          onChange={(e) => setAuditPerformedByFilter(e.target.value)}
-                          style={{
-                            width: '100%',
-                            padding: '8px 12px',
-                            border: '1px solid #D1D5DB',
-                            borderRadius: '6px',
-                            fontSize: '13px',
-                            color: '#374151'
-                          }}
-                        />
-                      </div>
-
-                      {/* Record ID */}
-                      <div>
-                        <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#4B5563', marginBottom: '6px' }}>
-                          Record ID
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="Enter Task ID..."
-                          value={auditRecordIdFilter}
-                          onChange={(e) => setAuditRecordIdFilter(e.target.value)}
-                          style={{
-                            width: '100%',
-                            padding: '8px 12px',
-                            border: '1px solid #D1D5DB',
-                            borderRadius: '6px',
-                            fontSize: '13px',
-                            color: '#374151'
-                          }}
-                        />
-                      </div>
-
-                      {/* Date Range - Start */}
-                      <div>
-                        <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#4B5563', marginBottom: '6px' }}>
-                          Start Date
-                        </label>
-                        <input
-                          type="date"
-                          value={auditDateRangeFilter.start}
-                          onChange={(e) => setAuditDateRangeFilter(prev => ({ ...prev, start: e.target.value }))}
-                          style={{
-                            width: '100%',
-                            padding: '8px 12px',
-                            border: '1px solid #D1D5DB',
-                            borderRadius: '6px',
-                            fontSize: '13px',
-                            color: '#374151'
-                          }}
-                        />
-                      </div>
-
-                      {/* Date Range - End */}
-                      <div>
-                        <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#4B5563', marginBottom: '6px' }}>
-                          End Date
-                        </label>
-                        <input
-                          type="date"
-                          value={auditDateRangeFilter.end}
-                          onChange={(e) => setAuditDateRangeFilter(prev => ({ ...prev, end: e.target.value }))}
-                          style={{
-                            width: '100%',
-                            padding: '8px 12px',
-                            border: '1px solid #D1D5DB',
-                            borderRadius: '6px',
-                            fontSize: '13px',
-                            color: '#374151'
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-
-              {/* Timeline Section */}
-              {filteredAuditLogs.length === 0 ? (
+              {/* Expanded State - Full Filter Panel */}
+              {auditFiltersExpanded && (
                 <div style={{
                   backgroundColor: '#FFFFFF',
                   border: '1px solid #E5E7EB',
                   borderRadius: '8px',
-                  padding: '60px 20px',
-                  textAlign: 'center'
+                  padding: '20px',
+                  transition: 'all 300ms ease'
                 }}>
-                  <AlertCircle size={48} style={{ color: '#9CA3AF', margin: '0 auto 16px' }} />
-                  <p style={{ fontSize: '16px', color: '#6B7280', fontWeight: '500' }}>
-                    No audit logs found for the selected filters.
-                  </p>
-                </div>
-              ) : (
-                <div style={{ position: 'relative' }}>
-                  {/* Vertical Timeline Line */}
-                  <div style={{
-                    position: 'absolute',
-                    left: '19px',
-                    top: '40px',
-                    bottom: '0',
-                    width: '2px',
-                    backgroundColor: '#E5E7EB'
-                  }} />
-
-                  {/* Log Cards */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                    {filteredAuditLogs.map((log) => (
-                      <div key={log.id} style={{ position: 'relative', paddingLeft: '56px' }}>
-                        {/* Timeline Icon */}
-                        <div style={{
-                          position: 'absolute',
-                          left: '0',
-                          top: '8px',
-                          width: '40px',
-                          height: '40px',
-                          borderRadius: '50%',
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                    <h3 style={{ fontSize: '14px', fontWeight: '600', color: '#272721', letterSpacing: '0.5px' }}>
+                      FILTER LOGS
+                    </h3>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <button
+                        onClick={resetAuditFilters}
+                        style={{
+                          padding: '8px 16px',
                           backgroundColor: '#FFFFFF',
-                          border: '2px solid #E5E7EB',
+                          border: '1px solid #D1D5DB',
+                          borderRadius: '6px',
+                          fontSize: '13px',
+                          fontWeight: '500',
+                          color: '#374151',
+                          cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
-                          justifyContent: 'center',
-                          zIndex: 1
-                        }}>
-                          {getAuditActionIcon(log.actionType)}
-                        </div>
-
-                        {/* Log Card */}
-                        <div style={{
+                          gap: '6px'
+                        }}
+                      >
+                        <RotateCcw size={14} />
+                        Reset All Filters
+                      </button>
+                      <button
+                        onClick={() => setAuditFiltersExpanded(false)}
+                        style={{
+                          padding: '8px 12px',
                           backgroundColor: '#FFFFFF',
-                          border: '1px solid #E5E7EB',
-                          borderRadius: '8px',
-                          overflow: 'hidden'
-                        }}>
-                          {/* Header Row */}
-                          <div 
-                            onClick={() => toggleAuditLog(log.id)}
-                            style={{
-                              padding: '16px 20px',
-                              cursor: 'pointer',
-                              backgroundColor: log.expanded ? '#F9FAFB' : '#FFFFFF',
-                              borderBottom: log.expanded ? '1px solid #E5E7EB' : 'none',
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              alignItems: 'center'
-                            }}
-                          >
-                            <div>
-                              <h4 style={{ fontSize: '14px', fontWeight: '600', color: '#111827', marginBottom: '4px' }}>
-                                {log.actionTitle} – {log.module}
-                              </h4>
-                            </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  toast.info('Raw log data would be displayed here');
-                                }}
-                                style={{
-                                  fontSize: '12px',
-                                  color: '#6B7280',
-                                  backgroundColor: 'transparent',
-                                  border: 'none',
-                                  cursor: 'pointer',
-                                  textDecoration: 'underline'
-                                }}
-                              >
-                                View Detail
-                              </button>
-                              {log.expanded ? <ChevronDown size={20} color="#6B7280" /> : <ChevronRight size={20} color="#6B7280" />}
-                            </div>
-                          </div>
+                          border: '1px solid #D1D5DB',
+                          borderRadius: '6px',
+                          fontSize: '13px',
+                          fontWeight: '500',
+                          color: '#6B7280',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px'
+                        }}
+                        title="Collapse filters"
+                      >
+                        <ChevronRight size={16} />
+                      </button>
+                    </div>
+                  </div>
 
-                          {/* Metadata Row */}
-                          <div style={{
-                            padding: '12px 20px',
-                            backgroundColor: '#F9FAFB',
-                            borderBottom: log.expanded ? '1px solid #E5E7EB' : 'none',
-                            display: 'flex',
-                            flexWrap: 'wrap',
-                            gap: '16px',
-                            fontSize: '12px'
-                          }}>
-                            <div>
-                              <span style={{ color: '#6B7280' }}>Action Type: </span>
-                              <span style={{ color: '#111827', fontWeight: '600' }}>{log.actionType}</span>
-                            </div>
-                            <div>
-                              <span style={{ color: '#6B7280' }}>Module: </span>
-                              <span style={{ color: '#111827', fontWeight: '600' }}>{log.module}</span>
-                            </div>
-                            <div>
-                              <span style={{ color: '#6B7280' }}>Task ID: </span>
-                              <span style={{ color: '#111827', fontWeight: '600' }}>{log.taskId}</span>
-                            </div>
-                            <div>
-                              <span style={{ color: '#6B7280' }}>Project ID: </span>
-                              <span style={{ color: '#111827', fontWeight: '600' }}>{log.projectId}</span>
-                            </div>
-                            <div>
-                              <span style={{ color: '#6B7280' }}>Performed By: </span>
-                              <span style={{ color: '#111827', fontWeight: '600' }}>{log.performedBy}</span>
-                            </div>
-                            <div>
-                              <span style={{ color: '#6B7280' }}>Date / Time: </span>
-                              <span style={{ color: '#111827', fontWeight: '600' }}>{log.timestamp}</span>
-                            </div>
-                          </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+                    {/* Module Name */}
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#4B5563', marginBottom: '6px' }}>
+                        Module Name
+                      </label>
+                      <StandardDropdown
+                        options={[
+                          { value: 'All Modules', label: 'All Modules' },
+                          { value: 'Task Management', label: 'Task Management' },
+                          { value: 'Progress Tracking', label: 'Progress Tracking' }
+                        ]}
+                        value={auditModuleFilter}
+                        onChange={(value) => setAuditModuleFilter(value as string)}
+                        placeholder="Select module"
+                        mode="single"
+                        style={{ width: '100%' }}
+                      />
+                    </div>
 
-                          {/* Expanded Content */}
-                          {log.expanded && (
-                            <div style={{ padding: '20px' }}>
-                              {/* TASK_CREATE Content */}
-                              {log.actionType === 'TASK_CREATE' && log.taskCreateData && (
-                                <div>
-                                  <h5 style={{ fontSize: '13px', fontWeight: '600', color: '#111827', marginBottom: '16px' }}>
-                                    Initial Values
-                                  </h5>
-                                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', fontSize: '13px' }}>
-                                    <div><span style={{ color: '#6B7280' }}>Task Name:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.taskCreateData.taskName}</span></div>
-                                    <div><span style={{ color: '#6B7280' }}>Activity Name:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.taskCreateData.activityName}</span></div>
-                                    <div><span style={{ color: '#6B7280' }}>Status:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.taskCreateData.status}</span></div>
-                                    <div><span style={{ color: '#6B7280' }}>Scope:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.taskCreateData.phase}</span></div>
-                                    <div><span style={{ color: '#6B7280' }}>Discipline:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.taskCreateData.discipline}</span></div>
-                                    <div><span style={{ color: '#6B7280' }}>Trade Package:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.taskCreateData.tradePackage}</span></div>
-                                    <div><span style={{ color: '#6B7280' }}>Subcontractor:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.taskCreateData.subcontractor}</span></div>
-                                    <div><span style={{ color: '#6B7280' }}>Start Date:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.taskCreateData.startDate}</span></div>
-                                    <div><span style={{ color: '#6B7280' }}>End Date:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.taskCreateData.endDate}</span></div>
-                                  </div>
-                                </div>
-                              )}
+                    {/* Action Type */}
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#4B5563', marginBottom: '6px' }}>
+                        Action Type
+                      </label>
+                      <StandardDropdown
+                        options={[
+                          { value: 'All Actions', label: 'All Actions' },
+                          { value: 'TASK_CREATE', label: 'TASK_CREATE' },
+                          { value: 'TASK_UPDATE', label: 'TASK_UPDATE' },
+                          { value: 'TASK_STATUS_CHANGE', label: 'TASK_STATUS_CHANGE' },
+                          { value: 'VERSION_CREATE', label: 'VERSION_CREATE' },
+                          { value: 'VERSION_STATUS_CHANGE', label: 'VERSION_STATUS_CHANGE' }
+                        ]}
+                        value={auditActionTypeFilter}
+                        onChange={(value) => setAuditActionTypeFilter(value as string)}
+                        placeholder="Select action type"
+                        mode="single"
+                        style={{ width: '100%' }}
+                      />
+                    </div>
 
-                              {/* TASK_UPDATE Content */}
-                              {log.actionType === 'TASK_UPDATE' && log.taskUpdateData && (
-                                <div>
-                                  <h5 style={{ fontSize: '13px', fontWeight: '600', color: '#111827', marginBottom: '16px' }}>
-                                    Field Changes
-                                  </h5>
-                                  <div style={{
-                                    border: '1px solid #E5E7EB',
-                                    borderRadius: '6px',
-                                    overflow: 'hidden'
-                                  }}>
-                                    <table style={{ width: '100%', fontSize: '13px' }}>
-                                      <thead>
-                                        <tr style={{ backgroundColor: '#F9FAFB' }}>
-                                          <th style={{ textAlign: 'left', padding: '10px 12px', fontWeight: '600', color: '#374151' }}>Field</th>
-                                          <th style={{ textAlign: 'left', padding: '10px 12px', fontWeight: '600', color: '#374151' }}>Old Value</th>
-                                          <th style={{ textAlign: 'center', padding: '10px 12px', width: '40px' }}></th>
-                                          <th style={{ textAlign: 'left', padding: '10px 12px', fontWeight: '600', color: '#374151' }}>New Value</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody>
-                                        {log.taskUpdateData.changes.map((change, idx) => (
-                                          <tr key={idx} style={{ borderTop: '1px solid #E5E7EB' }}>
-                                            <td style={{ padding: '10px 12px', color: '#111827', fontWeight: '500' }}>{change.field}</td>
-                                            <td style={{ padding: '10px 12px', color: '#6B7280' }}>{change.oldValue}</td>
-                                            <td style={{ padding: '10px 12px', textAlign: 'center' }}><ArrowRight size={16} color="#9CA3AF" /></td>
-                                            <td style={{ padding: '10px 12px', color: '#111827', fontWeight: '500' }}>{change.newValue}</td>
-                                          </tr>
-                                        ))}
-                                      </tbody>
-                                    </table>
-                                  </div>
-                                </div>
-                              )}
+                    {/* Performed By */}
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#4B5563', marginBottom: '6px' }}>
+                        Performed By
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Search user..."
+                        value={auditPerformedByFilter}
+                        onChange={(e) => setAuditPerformedByFilter(e.target.value)}
+                        style={{
+                          width: '100%',
+                          padding: '8px 12px',
+                          border: '1px solid #D1D5DB',
+                          borderRadius: '6px',
+                          fontSize: '13px',
+                          color: '#374151'
+                        }}
+                      />
+                    </div>
 
-                              {/* TASK_STATUS_CHANGE Content */}
-                              {log.actionType === 'TASK_STATUS_CHANGE' && log.taskStatusChangeData && (
-                                <div>
-                                  <h5 style={{ fontSize: '13px', fontWeight: '600', color: '#111827', marginBottom: '16px' }}>
-                                    Status Transition
-                                  </h5>
-                                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                                    <span style={{
-                                      padding: '8px 16px',
-                                      backgroundColor: '#F3F4F6',
-                                      color: '#374151',
-                                      borderRadius: '20px',
-                                      fontSize: '13px',
-                                      fontWeight: '600',
-                                      border: '1px solid #D1D5DB'
-                                    }}>
-                                      {log.taskStatusChangeData.oldStatus}
-                                    </span>
-                                    <ArrowRight size={20} color="#6B7280" />
-                                    <span style={{
-                                      padding: '8px 16px',
-                                      backgroundColor: '#10B98126',
-                                      color: '#10B981',
-                                      borderRadius: '20px',
-                                      fontSize: '13px',
-                                      fontWeight: '600',
-                                      border: '1px solid #10B98140'
-                                    }}>
-                                      {log.taskStatusChangeData.newStatus}
-                                    </span>
-                                  </div>
-                                </div>
-                              )}
+                    {/* Record ID */}
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#4B5563', marginBottom: '6px' }}>
+                        Record ID
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="Enter Task ID..."
+                        value={auditRecordIdFilter}
+                        onChange={(e) => setAuditRecordIdFilter(e.target.value)}
+                        style={{
+                          width: '100%',
+                          padding: '8px 12px',
+                          border: '1px solid #D1D5DB',
+                          borderRadius: '6px',
+                          fontSize: '13px',
+                          color: '#374151'
+                        }}
+                      />
+                    </div>
 
-                              {/* VERSION_CREATE Content */}
-                              {log.actionType === 'VERSION_CREATE' && log.versionCreateData && (
-                                <div>
-                                  <h5 style={{ fontSize: '13px', fontWeight: '600', color: '#111827', marginBottom: '16px' }}>
-                                    Version Details
-                                  </h5>
-                                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', fontSize: '13px' }}>
-                                    <div><span style={{ color: '#6B7280' }}>Version:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.versionCreateData.version}</span></div>
-                                    <div><span style={{ color: '#6B7280' }}>Based On:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.versionCreateData.basedOnVersion}</span></div>
-                                    <div><span style={{ color: '#6B7280' }}>Latest Approved:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.versionCreateData.latestApprovedVersion}</span></div>
-                                    <div><span style={{ color: '#6B7280' }}>Initial Progress:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.versionCreateData.initialProgress}%</span></div>
-                                  </div>
-                                </div>
-                              )}
+                    {/* Date Range - Start */}
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#4B5563', marginBottom: '6px' }}>
+                        Start Date
+                      </label>
+                      <input
+                        type="date"
+                        value={auditDateRangeFilter.start}
+                        onChange={(e) => setAuditDateRangeFilter(prev => ({ ...prev, start: e.target.value }))}
+                        style={{
+                          width: '100%',
+                          padding: '8px 12px',
+                          border: '1px solid #D1D5DB',
+                          borderRadius: '6px',
+                          fontSize: '13px',
+                          color: '#374151'
+                        }}
+                      />
+                    </div>
 
-                              {/* VERSION_STATUS_CHANGE Content */}
-                              {log.actionType === 'VERSION_STATUS_CHANGE' && log.versionStatusChangeData && (
-                                <div>
-                                  <h5 style={{ fontSize: '13px', fontWeight: '600', color: '#111827', marginBottom: '16px' }}>
-                                    Version Status Transition
-                                  </h5>
-                                  <div style={{ marginBottom: '20px' }}>
-                                    <div style={{ fontSize: '13px', color: '#6B7280', marginBottom: '8px' }}>
-                                      Version {log.versionStatusChangeData.version}
-                                    </div>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                                      <span style={{
-                                        padding: '6px 14px',
-                                        backgroundColor: '#F3F4F6',
-                                        color: '#374151',
-                                        borderRadius: '16px',
-                                        fontSize: '12px',
-                                        fontWeight: '600',
-                                        border: '1px solid #D1D5DB'
-                                      }}>
-                                        {log.versionStatusChangeData.oldStatus}
-                                      </span>
-                                      <ArrowRight size={18} color="#6B7280" />
-                                      <span style={{
-                                        padding: '6px 14px',
-                                        backgroundColor: '#10B98120',
-                                        color: '#10B981',
-                                        borderRadius: '16px',
-                                        fontSize: '12px',
-                                        fontWeight: '600',
-                                        border: '1px solid #10B98140'
-                                      }}>
-                                        {log.versionStatusChangeData.newStatus}
-                                      </span>
-                                    </div>
-                                  </div>
-
-                                  <h6 style={{ fontSize: '12px', fontWeight: '600', color: '#111827', marginBottom: '12px' }}>
-                                    Progress Details
-                                  </h6>
-                                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', fontSize: '13px', marginBottom: '20px' }}>
-                                    <div><span style={{ color: '#6B7280' }}>Previous Approved:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.versionStatusChangeData.previousApprovedProgress}%</span></div>
-                                    <div><span style={{ color: '#6B7280' }}>Submitted:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.versionStatusChangeData.submittedProgress}%</span></div>
-                                    <div><span style={{ color: '#6B7280' }}>Approved:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.versionStatusChangeData.approvedProgress}%</span></div>
-                                  </div>
-
-                                  {log.versionStatusChangeData.comments && (
-                                    <div>
-                                      <h6 style={{ fontSize: '12px', fontWeight: '600', color: '#111827', marginBottom: '8px' }}>
-                                        Comments / Reason
-                                      </h6>
-                                      <div style={{
-                                        padding: '12px',
-                                        backgroundColor: '#F9FAFB',
-                                        borderRadius: '6px',
-                                        border: '1px solid #E5E7EB',
-                                        fontSize: '13px',
-                                        color: '#374151',
-                                        fontStyle: 'italic'
-                                      }}>
-                                        {log.versionStatusChangeData.comments}
-                                      </div>
-                                    </div>
-                                  )}
-                                </div>
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    ))}
+                    {/* Date Range - End */}
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', fontWeight: '600', color: '#4B5563', marginBottom: '6px' }}>
+                        End Date
+                      </label>
+                      <input
+                        type="date"
+                        value={auditDateRangeFilter.end}
+                        onChange={(e) => setAuditDateRangeFilter(prev => ({ ...prev, end: e.target.value }))}
+                        style={{
+                          width: '100%',
+                          padding: '8px 12px',
+                          border: '1px solid #D1D5DB',
+                          borderRadius: '6px',
+                          fontSize: '13px',
+                          color: '#374151'
+                        }}
+                      />
+                    </div>
                   </div>
                 </div>
               )}
             </div>
-          )
+
+
+            {/* Timeline Section */}
+            {filteredAuditLogs.length === 0 ? (
+              <div style={{
+                backgroundColor: '#FFFFFF',
+                border: '1px solid #E5E7EB',
+                borderRadius: '8px',
+                padding: '60px 20px',
+                textAlign: 'center'
+              }}>
+                <AlertCircle size={48} style={{ color: '#9CA3AF', margin: '0 auto 16px' }} />
+                <p style={{ fontSize: '16px', color: '#6B7280', fontWeight: '500' }}>
+                  No audit logs found for the selected filters.
+                </p>
+              </div>
+            ) : (
+              <div style={{ position: 'relative' }}>
+                {/* Vertical Timeline Line */}
+                <div style={{
+                  position: 'absolute',
+                  left: '19px',
+                  top: '40px',
+                  bottom: '0',
+                  width: '2px',
+                  backgroundColor: '#E5E7EB'
+                }} />
+
+                {/* Log Cards */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                  {filteredAuditLogs.map((log) => (
+                    <div key={log.id} style={{ position: 'relative', paddingLeft: '56px' }}>
+                      {/* Timeline Icon */}
+                      <div style={{
+                        position: 'absolute',
+                        left: '0',
+                        top: '8px',
+                        width: '40px',
+                        height: '40px',
+                        borderRadius: '50%',
+                        backgroundColor: '#FFFFFF',
+                        border: '2px solid #E5E7EB',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        zIndex: 1
+                      }}>
+                        {getAuditActionIcon(log.actionType)}
+                      </div>
+
+                      {/* Log Card */}
+                      <div style={{
+                        backgroundColor: '#FFFFFF',
+                        border: '1px solid #E5E7EB',
+                        borderRadius: '8px',
+                        overflow: 'hidden'
+                      }}>
+                        {/* Header Row */}
+                        <div
+                          onClick={() => toggleAuditLog(log.id)}
+                          style={{
+                            padding: '16px 20px',
+                            cursor: 'pointer',
+                            backgroundColor: log.expanded ? '#F9FAFB' : '#FFFFFF',
+                            borderBottom: log.expanded ? '1px solid #E5E7EB' : 'none',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center'
+                          }}
+                        >
+                          <div>
+                            <h4 style={{ fontSize: '14px', fontWeight: '600', color: '#111827', marginBottom: '4px' }}>
+                              {log.actionTitle} – {log.module}
+                            </h4>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                toast.info('Raw log data would be displayed here');
+                              }}
+                              style={{
+                                fontSize: '12px',
+                                color: '#6B7280',
+                                backgroundColor: 'transparent',
+                                border: 'none',
+                                cursor: 'pointer',
+                                textDecoration: 'underline'
+                              }}
+                            >
+                              View Detail
+                            </button>
+                            {log.expanded ? <ChevronDown size={20} color="#6B7280" /> : <ChevronRight size={20} color="#6B7280" />}
+                          </div>
+                        </div>
+
+                        {/* Metadata Row */}
+                        <div style={{
+                          padding: '12px 20px',
+                          backgroundColor: '#F9FAFB',
+                          borderBottom: log.expanded ? '1px solid #E5E7EB' : 'none',
+                          display: 'flex',
+                          flexWrap: 'wrap',
+                          gap: '16px',
+                          fontSize: '12px'
+                        }}>
+                          <div>
+                            <span style={{ color: '#6B7280' }}>Action Type: </span>
+                            <span style={{ color: '#111827', fontWeight: '600' }}>{log.actionType}</span>
+                          </div>
+                          <div>
+                            <span style={{ color: '#6B7280' }}>Module: </span>
+                            <span style={{ color: '#111827', fontWeight: '600' }}>{log.module}</span>
+                          </div>
+                          <div>
+                            <span style={{ color: '#6B7280' }}>Task ID: </span>
+                            <span style={{ color: '#111827', fontWeight: '600' }}>{log.taskId}</span>
+                          </div>
+                          <div>
+                            <span style={{ color: '#6B7280' }}>Project ID: </span>
+                            <span style={{ color: '#111827', fontWeight: '600' }}>{log.projectId}</span>
+                          </div>
+                          <div>
+                            <span style={{ color: '#6B7280' }}>Performed By: </span>
+                            <span style={{ color: '#111827', fontWeight: '600' }}>{log.performedBy}</span>
+                          </div>
+                          <div>
+                            <span style={{ color: '#6B7280' }}>Date / Time: </span>
+                            <span style={{ color: '#111827', fontWeight: '600' }}>{log.timestamp}</span>
+                          </div>
+                        </div>
+
+                        {/* Expanded Content */}
+                        {log.expanded && (
+                          <div style={{ padding: '20px' }}>
+                            {/* TASK_CREATE Content */}
+                            {log.actionType === 'TASK_CREATE' && log.taskCreateData && (
+                              <div>
+                                <h5 style={{ fontSize: '13px', fontWeight: '600', color: '#111827', marginBottom: '16px' }}>
+                                  Initial Values
+                                </h5>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', fontSize: '13px' }}>
+                                  <div><span style={{ color: '#6B7280' }}>Task Name:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.taskCreateData.taskName}</span></div>
+                                  <div><span style={{ color: '#6B7280' }}>Activity Name:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.taskCreateData.activityName}</span></div>
+                                  <div><span style={{ color: '#6B7280' }}>Status:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.taskCreateData.status}</span></div>
+                                  <div><span style={{ color: '#6B7280' }}>Scope:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.taskCreateData.phase}</span></div>
+                                  <div><span style={{ color: '#6B7280' }}>Discipline:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.taskCreateData.discipline}</span></div>
+                                  <div><span style={{ color: '#6B7280' }}>Trade Package:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.taskCreateData.tradePackage}</span></div>
+                                  <div><span style={{ color: '#6B7280' }}>Subcontractor:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.taskCreateData.subcontractor}</span></div>
+                                  <div><span style={{ color: '#6B7280' }}>Start Date:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.taskCreateData.startDate}</span></div>
+                                  <div><span style={{ color: '#6B7280' }}>End Date:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.taskCreateData.endDate}</span></div>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* TASK_UPDATE Content */}
+                            {log.actionType === 'TASK_UPDATE' && log.taskUpdateData && (
+                              <div>
+                                <h5 style={{ fontSize: '13px', fontWeight: '600', color: '#111827', marginBottom: '16px' }}>
+                                  Field Changes
+                                </h5>
+                                <div style={{
+                                  border: '1px solid #E5E7EB',
+                                  borderRadius: '6px',
+                                  overflow: 'hidden'
+                                }}>
+                                  <table style={{ width: '100%', fontSize: '13px' }}>
+                                    <thead>
+                                      <tr style={{ backgroundColor: '#F9FAFB' }}>
+                                        <th style={{ textAlign: 'left', padding: '10px 12px', fontWeight: '600', color: '#374151' }}>Field</th>
+                                        <th style={{ textAlign: 'left', padding: '10px 12px', fontWeight: '600', color: '#374151' }}>Old Value</th>
+                                        <th style={{ textAlign: 'center', padding: '10px 12px', width: '40px' }}></th>
+                                        <th style={{ textAlign: 'left', padding: '10px 12px', fontWeight: '600', color: '#374151' }}>New Value</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {log.taskUpdateData.changes.map((change, idx) => (
+                                        <tr key={idx} style={{ borderTop: '1px solid #E5E7EB' }}>
+                                          <td style={{ padding: '10px 12px', color: '#111827', fontWeight: '500' }}>{change.field}</td>
+                                          <td style={{ padding: '10px 12px', color: '#6B7280' }}>{change.oldValue}</td>
+                                          <td style={{ padding: '10px 12px', textAlign: 'center' }}><ArrowRight size={16} color="#9CA3AF" /></td>
+                                          <td style={{ padding: '10px 12px', color: '#111827', fontWeight: '500' }}>{change.newValue}</td>
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* TASK_STATUS_CHANGE Content */}
+                            {log.actionType === 'TASK_STATUS_CHANGE' && log.taskStatusChangeData && (
+                              <div>
+                                <h5 style={{ fontSize: '13px', fontWeight: '600', color: '#111827', marginBottom: '16px' }}>
+                                  Status Transition
+                                </h5>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                                  <span style={{
+                                    padding: '8px 16px',
+                                    backgroundColor: '#F3F4F6',
+                                    color: '#374151',
+                                    borderRadius: '20px',
+                                    fontSize: '13px',
+                                    fontWeight: '600',
+                                    border: '1px solid #D1D5DB'
+                                  }}>
+                                    {log.taskStatusChangeData.oldStatus}
+                                  </span>
+                                  <ArrowRight size={20} color="#6B7280" />
+                                  <span style={{
+                                    padding: '8px 16px',
+                                    backgroundColor: '#10B98126',
+                                    color: '#10B981',
+                                    borderRadius: '20px',
+                                    fontSize: '13px',
+                                    fontWeight: '600',
+                                    border: '1px solid #10B98140'
+                                  }}>
+                                    {log.taskStatusChangeData.newStatus}
+                                  </span>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* VERSION_CREATE Content */}
+                            {log.actionType === 'VERSION_CREATE' && log.versionCreateData && (
+                              <div>
+                                <h5 style={{ fontSize: '13px', fontWeight: '600', color: '#111827', marginBottom: '16px' }}>
+                                  Version Details
+                                </h5>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', fontSize: '13px' }}>
+                                  <div><span style={{ color: '#6B7280' }}>Version:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.versionCreateData.version}</span></div>
+                                  <div><span style={{ color: '#6B7280' }}>Based On:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.versionCreateData.basedOnVersion}</span></div>
+                                  <div><span style={{ color: '#6B7280' }}>Latest Approved:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.versionCreateData.latestApprovedVersion}</span></div>
+                                  <div><span style={{ color: '#6B7280' }}>Initial Progress:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.versionCreateData.initialProgress}%</span></div>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* VERSION_STATUS_CHANGE Content */}
+                            {log.actionType === 'VERSION_STATUS_CHANGE' && log.versionStatusChangeData && (
+                              <div>
+                                <h5 style={{ fontSize: '13px', fontWeight: '600', color: '#111827', marginBottom: '16px' }}>
+                                  Version Status Transition
+                                </h5>
+                                <div style={{ marginBottom: '20px' }}>
+                                  <div style={{ fontSize: '13px', color: '#6B7280', marginBottom: '8px' }}>
+                                    Version {log.versionStatusChangeData.version}
+                                  </div>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                                    <span style={{
+                                      padding: '6px 14px',
+                                      backgroundColor: '#F3F4F6',
+                                      color: '#374151',
+                                      borderRadius: '16px',
+                                      fontSize: '12px',
+                                      fontWeight: '600',
+                                      border: '1px solid #D1D5DB'
+                                    }}>
+                                      {log.versionStatusChangeData.oldStatus}
+                                    </span>
+                                    <ArrowRight size={18} color="#6B7280" />
+                                    <span style={{
+                                      padding: '6px 14px',
+                                      backgroundColor: '#10B98120',
+                                      color: '#10B981',
+                                      borderRadius: '16px',
+                                      fontSize: '12px',
+                                      fontWeight: '600',
+                                      border: '1px solid #10B98140'
+                                    }}>
+                                      {log.versionStatusChangeData.newStatus}
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <h6 style={{ fontSize: '12px', fontWeight: '600', color: '#111827', marginBottom: '12px' }}>
+                                  Progress Details
+                                </h6>
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', fontSize: '13px', marginBottom: '20px' }}>
+                                  <div><span style={{ color: '#6B7280' }}>Previous Approved:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.versionStatusChangeData.previousApprovedProgress}%</span></div>
+                                  <div><span style={{ color: '#6B7280' }}>Submitted:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.versionStatusChangeData.submittedProgress}%</span></div>
+                                  <div><span style={{ color: '#6B7280' }}>Approved:</span> <span style={{ color: '#111827', fontWeight: '500' }}>{log.versionStatusChangeData.approvedProgress}%</span></div>
+                                </div>
+
+                                {log.versionStatusChangeData.comments && (
+                                  <div>
+                                    <h6 style={{ fontSize: '12px', fontWeight: '600', color: '#111827', marginBottom: '8px' }}>
+                                      Comments / Reason
+                                    </h6>
+                                    <div style={{
+                                      padding: '12px',
+                                      backgroundColor: '#F9FAFB',
+                                      borderRadius: '6px',
+                                      border: '1px solid #E5E7EB',
+                                      fontSize: '13px',
+                                      color: '#374151',
+                                      fontStyle: 'italic'
+                                    }}>
+                                      {log.versionStatusChangeData.comments}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )
       )}
     </div>
   );

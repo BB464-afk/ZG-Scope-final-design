@@ -26,7 +26,7 @@ const MOCK_TASKS_DATA = [
     costType: '50 - Assembly',
     deliveryPackage: 'CON03 - Fitout',
     rocId: 'ROC-001',
-    tradePackageCode: 'S01',
+    tradePackageCode: 'S15-A5000',
     workComplete: 0,
     status: 'Not Started',
     createdAt: '03/11/2026'
@@ -46,8 +46,8 @@ const MOCK_TASKS_DATA = [
     spa: 'S31 - Architectural Fit-Out',
     costType: '50 - Assembly',
     deliveryPackage: 'CON03 - Fitout',
-    rocId: 'ROC-002',
-    tradePackageCode: 'S02',
+    rocId: 'ROC-005',
+    tradePackageCode: 'S31-A3000',
     workComplete: 0,
     status: 'Not Started',
     createdAt: '03/11/2026'
@@ -67,8 +67,8 @@ const MOCK_TASKS_DATA = [
     spa: 'S15 - EYD Fuel Oil',
     costType: '55 - Contractor Procurement',
     deliveryPackage: 'LLM01 - Long Lead Material',
-    rocId: 'ROC-002',
-    tradePackageCode: 'S02',
+    rocId: 'ROC-001',
+    tradePackageCode: 'S15-A5000',
     workComplete: 100,
     status: 'Completed',
     createdAt: '14/10/2026'
@@ -88,8 +88,8 @@ const MOCK_TASKS_DATA = [
     spa: 'S08 - Fire Suppression',
     costType: '50 - Assembly',
     deliveryPackage: 'CON03 - Fitout',
-    rocId: 'ROC-003',
-    tradePackageCode: 'E01',
+    rocId: 'ROC-004',
+    tradePackageCode: 'S08-A6100',
     workComplete: 20,
     status: 'In Progress',
     createdAt: '14/10/2026'
@@ -109,8 +109,8 @@ const MOCK_TASKS_DATA = [
     spa: 'S29 - General Electrical',
     costType: '50 - Assembly',
     deliveryPackage: 'CON03 - Fitout',
-    rocId: 'ROC-001',
-    tradePackageCode: 'S01',
+    rocId: 'ROC-003',
+    tradePackageCode: 'S14-A5000',
     workComplete: 100,
     status: 'Completed',
     createdAt: '18/10/2026'
@@ -130,8 +130,8 @@ const MOCK_TASKS_DATA = [
     spa: 'S19 - MYD Secondary Substation',
     costType: '50 - Assembly',
     deliveryPackage: 'CON03 - Fitout',
-    rocId: 'ROC-004',
-    tradePackageCode: 'A01',
+    rocId: 'ROC-002',
+    tradePackageCode: 'S19-A5000',
     workComplete: 0,
     status: 'Not Started',
     createdAt: '03/11/2026'
@@ -154,11 +154,18 @@ const DISCIPLINE_OPTIONS = [
 ];
 const STATUS_OPTIONS = ['Not Started', 'In Progress', 'Void', 'On Hold', 'Completed'].map(val => ({ value: val, label: val }));
 const TRADE_PACKAGE_OPTIONS = [
-  { value: 'TP-01 - MEP Package 01', label: 'TP-01 - MEP Package 01' },
-  { value: 'TP-02 - MEP Package 02', label: 'TP-02 - MEP Package 02' },
-  { value: 'TP-03 - Electrical Package 01', label: 'TP-03 - Electrical Package 01' },
-  { value: 'TP-04 - Architectural Package 01', label: 'TP-04 - Architectural Package 01' },
-  { value: 'TP-05 - Fire Safety Package', label: 'TP-05 - Fire Safety Package' }
+  { value: 'S08-A6100 - Fire Suppression', label: 'S08-A6100 - Fire Suppression' },
+  { value: 'S14-A5000 - EYD Conveyance Electrical Assembly', label: 'S14-A5000 - EYD Conveyance Electrical Assembly' },
+  { value: 'S15-A5000 - EYD Fuel Oil Electrical Assembly', label: 'S15-A5000 - EYD Fuel Oil Electrical Assembly' },
+  { value: 'S15-A6000 - EYD Fuel Oil Mechanical Assembly', label: 'S15-A6000 - EYD Fuel Oil Mechanical Assembly' },
+  { value: 'S17-A5000 - Server Switchgear Electrical Assembly', label: 'S17-A5000 - Server Switchgear Electrical Assembly' },
+  { value: 'S18-A5000 - Server Conveyance Electrical Assembly', label: 'S18-A5000 - Server Conveyance Electrical Assembly' },
+  { value: 'S19-A4000 - MYD Secondary Substation Placement', label: 'S19-A4000 - MYD Secondary Substation Placement' },
+  { value: 'S19-A5000 - MYD Secondary Substation Electrical Assembly', label: 'S19-A5000 - MYD Secondary Substation Electrical Assembly' },
+  { value: 'S19-P3000 - MYD Secondary Substation Procurement', label: 'S19-P3000 - MYD Secondary Substation Procurement' },
+  { value: 'S24-A5000 - MYD Electrical Conveyance Electrical Assembly', label: 'S24-A5000 - MYD Electrical Conveyance Electrical Assembly' },
+  { value: 'S29-A5300 - General Electrical Branch Wiring', label: 'S29-A5300 - General Electrical Branch Wiring' },
+  { value: 'S31-A3000 - Architectural Fit-Out', label: 'S31-A3000 - Architectural Fit-Out' },
 ];
 const SUBCONTRACTOR_OPTIONS = [
   { value: 'SUB-01 - ABC Contractors', label: 'SUB-01 - ABC Contractors' },
@@ -201,12 +208,12 @@ const DELIVERY_PACKAGE_OPTIONS = [
 const TASK_DRAWING_LINKS: {
   tradePackageCode: string; rocId: string; stepNumber: number; stepName: string; link: string;
 }[] = [
-  { tradePackageCode: 'S01', rocId: 'ROC-001', stepNumber: 1, stepName: 'Material PO Issued',  link: 'https://drive.google.com/folders/S01-ROC001-STEP1' },
-  { tradePackageCode: 'S01', rocId: 'ROC-001', stepNumber: 2, stepName: 'Material Delivered',  link: 'https://drive.google.com/folders/S01-ROC001-STEP2' },
-  { tradePackageCode: 'S01', rocId: 'ROC-001', stepNumber: 3, stepName: 'Installation',         link: 'https://drive.google.com/folders/S01-ROC001-STEP3' },
-  { tradePackageCode: 'S01', rocId: 'ROC-001', stepNumber: 4, stepName: 'Testing',              link: 'https://drive.google.com/folders/S01-ROC001-STEP4' },
-  { tradePackageCode: 'S02', rocId: 'ROC-002', stepNumber: 1, stepName: 'Material PO Issued',  link: 'https://drive.google.com/folders/S02-ROC002-STEP1' },
-  { tradePackageCode: 'S02', rocId: 'ROC-002', stepNumber: 2, stepName: 'Material Delivered',  link: 'https://drive.google.com/folders/S02-ROC002-STEP2' },
+  { tradePackageCode: 'S15-A5000', rocId: 'ROC-001', stepNumber: 1, stepName: 'Material PO Issued',         link: 'https://drive.google.com/file/d/1RHH8mRH_6DIgm4JSkRgHlkKx1ty2CP-D/view?usp=sharing' },
+  { tradePackageCode: 'S15-A5000', rocId: 'ROC-001', stepNumber: 2, stepName: 'Material Delivered to Site', link: 'https://drive.google.com/file/d/1RHH8mRH_6DIgm4JSkRgHlkKx1ty2CP-D/view?usp=sharing' },
+  { tradePackageCode: 'S15-A5000', rocId: 'ROC-001', stepNumber: 3, stepName: 'Equipment Installation',     link: 'https://drive.google.com/file/d/1RHH8mRH_6DIgm4JSkRgHlkKx1ty2CP-D/view?usp=sharing' },
+  { tradePackageCode: 'S19-A5000', rocId: 'ROC-002', stepNumber: 1, stepName: 'Shop Drawing Approved',      link: 'https://drive.google.com/file/d/1RHH8mRH_6DIgm4JSkRgHlkKx1ty2CP-D/view?usp=sharing' },
+  { tradePackageCode: 'S19-A5000', rocId: 'ROC-002', stepNumber: 2, stepName: 'Lift & Place',               link: 'https://drive.google.com/file/d/1RHH8mRH_6DIgm4JSkRgHlkKx1ty2CP-D/view?usp=sharing' },
+  { tradePackageCode: 'S14-A5000', rocId: 'ROC-003', stepNumber: 1, stepName: 'Steel Fabrication Approved', link: 'https://drive.google.com/file/d/1RHH8mRH_6DIgm4JSkRgHlkKx1ty2CP-D/view?usp=sharing' },
 ];
 
 // All steps per ROC (mirrors DrawingLinks.tsx ROCS)

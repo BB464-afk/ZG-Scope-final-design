@@ -33,12 +33,12 @@ interface DrawingLinkRecord {
 }
 
 const ALL_DRAWING_LINKS: DrawingLinkRecord[] = [
-  { id: 1, tradePackageCode: 'S01', tradePackageName: 'Structural Steel',    rocId: 'ROC-001', stepNumber: 1, stepName: 'Material PO Issued',  drawingFolderLink: 'https://drive.google.com/folders/S01-ROC001-STEP1', updatedBy: 'Manali Ruchandani', updatedOn: '03/11/2026 10:10 AM' },
-  { id: 2, tradePackageCode: 'S01', tradePackageName: 'Structural Steel',    rocId: 'ROC-001', stepNumber: 2, stepName: 'Material Delivered',    drawingFolderLink: 'https://drive.google.com/folders/S01-ROC001-STEP2', updatedBy: 'Bhoomi Barot',      updatedOn: '03/11/2026 10:11 AM' },
-  { id: 3, tradePackageCode: 'S01', tradePackageName: 'Structural Steel',    rocId: 'ROC-001', stepNumber: 3, stepName: 'Installation',           drawingFolderLink: 'https://drive.google.com/folders/S01-ROC001-STEP3', updatedBy: 'Manali Ruchandani', updatedOn: '03/11/2026 10:12 AM' },
-  { id: 4, tradePackageCode: 'S01', tradePackageName: 'Structural Steel',    rocId: 'ROC-001', stepNumber: 4, stepName: 'Testing',                drawingFolderLink: 'https://drive.google.com/folders/S01-ROC001-STEP4', updatedBy: 'Bhoomi Barot',      updatedOn: '03/11/2026 10:13 AM' },
-  { id: 5, tradePackageCode: 'S02', tradePackageName: 'Mechanical Services', rocId: 'ROC-002', stepNumber: 1, stepName: 'Material PO Issued',    drawingFolderLink: 'https://drive.google.com/folders/S02-ROC002-STEP1', updatedBy: 'Manali Ruchandani', updatedOn: '03/11/2026 10:14 AM' },
-  { id: 6, tradePackageCode: 'S02', tradePackageName: 'Mechanical Services', rocId: 'ROC-002', stepNumber: 2, stepName: 'Material Delivered',     drawingFolderLink: 'https://drive.google.com/folders/S02-ROC002-STEP2', updatedBy: 'Bhoomi Barot',      updatedOn: '03/11/2026 10:15 AM' },
+  { id: 1, tradePackageCode: 'S15-A5000', tradePackageName: 'EYD Fuel Oil Electrical Assembly', rocId: 'ROC-001', stepNumber: 1, stepName: 'Material PO Issued', drawingFolderLink: 'https://drive.google.com/file/d/1RHH8mRH_6DIgm4JSkRgHlkKx1ty2CP-D/view?usp=sharing', updatedBy: 'Christian Feichtinger', updatedOn: '14/10/2026 09:00 AM' },
+  { id: 2, tradePackageCode: 'S15-A5000', tradePackageName: 'EYD Fuel Oil Electrical Assembly', rocId: 'ROC-001', stepNumber: 2, stepName: 'Material Delivered to Site', drawingFolderLink: 'https://drive.google.com/file/d/1RHH8mRH_6DIgm4JSkRgHlkKx1ty2CP-D/view?usp=sharing', updatedBy: 'Christian Feichtinger', updatedOn: '14/10/2026 09:15 AM' },
+  { id: 3, tradePackageCode: 'S15-A5000', tradePackageName: 'EYD Fuel Oil Electrical Assembly', rocId: 'ROC-001', stepNumber: 3, stepName: 'Equipment Installation', drawingFolderLink: 'https://drive.google.com/file/d/1RHH8mRH_6DIgm4JSkRgHlkKx1ty2CP-D/view?usp=sharing', updatedBy: 'Bogdan-Constantin Pana', updatedOn: '17/10/2026 10:00 AM' },
+  { id: 4, tradePackageCode: 'S19-A5000', tradePackageName: 'MYD Secondary Substation Electrical Assembly', rocId: 'ROC-002', stepNumber: 1, stepName: 'Shop Drawing Approved', drawingFolderLink: 'https://drive.google.com/file/d/1RHH8mRH_6DIgm4JSkRgHlkKx1ty2CP-D/view?usp=sharing', updatedBy: 'Manali Ruchandani', updatedOn: '03/11/2026 10:10 AM' },
+  { id: 5, tradePackageCode: 'S19-A5000', tradePackageName: 'MYD Secondary Substation Electrical Assembly', rocId: 'ROC-002', stepNumber: 2, stepName: 'Lift & Place', drawingFolderLink: 'https://drive.google.com/file/d/1RHH8mRH_6DIgm4JSkRgHlkKx1ty2CP-D/view?usp=sharing', updatedBy: 'Manali Ruchandani', updatedOn: '03/11/2026 10:30 AM' },
+  { id: 6, tradePackageCode: 'S14-A5000', tradePackageName: 'EYD Conveyance Electrical Assembly', rocId: 'ROC-003', stepNumber: 1, stepName: 'Steel Fabrication Approved', drawingFolderLink: 'https://drive.google.com/file/d/1RHH8mRH_6DIgm4JSkRgHlkKx1ty2CP-D/view?usp=sharing', updatedBy: 'Bhoomi Barot', updatedOn: '10/11/2026 11:00 AM' },
 ];
 
 interface Attachment {
@@ -105,15 +105,15 @@ export const AttachmentsTabContent: React.FC<AttachmentsTabContentProps> = ({
   const taskDrawingLinks = ALL_DRAWING_LINKS.filter(
     l => l.tradePackageCode === tradePackageCode && l.rocId === rocId
   );
-  
+
   // Bulk selection state
   const [selectedFiles, setSelectedFiles] = useState<number[]>([]);
   const [selectedLinks, setSelectedLinks] = useState<number[]>([]);
-  
+
   // Delete confirmation state
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<{ id: number; name: string } | null>(null);
-  
+
   // Tooltip state for evidence badges
   const [hoveredEvidence, setHoveredEvidence] = useState<number | null>(null);
 
@@ -121,7 +121,7 @@ export const AttachmentsTabContent: React.FC<AttachmentsTabContentProps> = ({
     if (att.fileType === 'url') {
       return <ExternalLink size={18} style={{ color: '#3B82F6' }} />;
     }
-    
+
     switch (att.fileExtension) {
       case 'pdf':
         return <File size={18} style={{ color: '#DC2626' }} />;
@@ -232,7 +232,7 @@ export const AttachmentsTabContent: React.FC<AttachmentsTabContentProps> = ({
   return (
     <>
       <div style={{ padding: '24px 32px', maxWidth: '1400px', margin: '0 auto' }}>
-        
+
         {/* Header */}
         <div style={{ marginBottom: '24px' }}>
           <h2 style={{ fontSize: '18px', fontWeight: '600', color: '#111827', margin: '0 0 4px 0' }}>
@@ -249,15 +249,15 @@ export const AttachmentsTabContent: React.FC<AttachmentsTabContentProps> = ({
           flexDirection: 'column',
           gap: '20px'
         }}>
-          
+
           {/* FILES SECTION - Top */}
           <div>
-            <div 
+            <div
               onClick={() => setFilesExpanded(!filesExpanded)}
-              style={{ 
-                display: 'flex', 
-                justifyContent: 'space-between', 
-                alignItems: 'center', 
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
                 marginBottom: '12px',
                 cursor: 'pointer',
                 padding: '8px 12px',
@@ -328,7 +328,7 @@ export const AttachmentsTabContent: React.FC<AttachmentsTabContentProps> = ({
                 </button>
               </div>
             </div>
-            
+
             {/* Bulk Actions for Files */}
             {filesExpanded && selectedFiles.length > 0 && (
               <div style={{
@@ -390,9 +390,9 @@ export const AttachmentsTabContent: React.FC<AttachmentsTabContentProps> = ({
             )}
 
             {filesExpanded && filteredFiles.length > 0 && (
-              <div style={{ 
-                backgroundColor: '#FFFFFF', 
-                border: '1px solid #C8D9EE', 
+              <div style={{
+                backgroundColor: '#FFFFFF',
+                border: '1px solid #C8D9EE',
                 borderRadius: '4px',
                 overflow: 'hidden'
               }}>
@@ -617,13 +617,13 @@ export const AttachmentsTabContent: React.FC<AttachmentsTabContentProps> = ({
                       }}
                     >
                       {/* File Name with Icon */}
-                      <div style={{ 
+                      <div style={{
                         height: '52px',
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        gap: '10px', 
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px',
                         padding: '0 12px',
-                        minWidth: 0 
+                        minWidth: 0
                       }}>
                         <div style={{
                           width: '32px',
@@ -650,7 +650,7 @@ export const AttachmentsTabContent: React.FC<AttachmentsTabContentProps> = ({
                       </div>
 
                       {/* Version */}
-                      <div style={{ 
+                      <div style={{
                         height: '52px',
                         display: 'flex',
                         alignItems: 'center',
@@ -674,31 +674,31 @@ export const AttachmentsTabContent: React.FC<AttachmentsTabContentProps> = ({
                       </div>
 
                       {/* Uploaded By */}
-                      <div style={{ 
+                      <div style={{
                         height: '52px',
                         display: 'flex',
                         alignItems: 'center',
                         padding: '0 12px',
-                        fontSize: '13px', 
-                        color: '#272721' 
+                        fontSize: '13px',
+                        color: '#272721'
                       }}>
                         {att.uploadedBy}
                       </div>
 
                       {/* Uploaded At */}
-                      <div style={{ 
+                      <div style={{
                         height: '52px',
                         display: 'flex',
                         alignItems: 'center',
                         padding: '0 12px',
-                        fontSize: '13px', 
-                        color: '#6B7280' 
+                        fontSize: '13px',
+                        color: '#6B7280'
                       }}>
                         {att.uploadDate}
                       </div>
 
                       {/* Step Name */}
-                      <div style={{ 
+                      <div style={{
                         height: '52px',
                         display: 'flex',
                         alignItems: 'center',
@@ -726,10 +726,10 @@ export const AttachmentsTabContent: React.FC<AttachmentsTabContentProps> = ({
                       </div>
 
                       {/* Actions */}
-                      <div style={{ 
+                      <div style={{
                         height: '52px',
-                        display: 'flex', 
-                        gap: '6px', 
+                        display: 'flex',
+                        gap: '6px',
                         padding: '0 12px',
                         alignItems: 'center'
                       }}>
@@ -862,12 +862,12 @@ export const AttachmentsTabContent: React.FC<AttachmentsTabContentProps> = ({
 
           {/* LINKS SECTION - Bottom */}
           <div>
-            <div 
+            <div
               onClick={() => setLinksExpanded(!linksExpanded)}
-              style={{ 
-                display: 'flex', 
-                justifyContent: 'space-between', 
-                alignItems: 'center', 
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
                 marginBottom: '12px',
                 cursor: 'pointer',
                 padding: '8px 12px',
@@ -911,7 +911,7 @@ export const AttachmentsTabContent: React.FC<AttachmentsTabContentProps> = ({
                 Add Link
               </button>
             </div>
-            
+
             {/* Bulk Actions for Links */}
             {linksExpanded && selectedLinks.length > 0 && (
               <div style={{
@@ -953,9 +953,9 @@ export const AttachmentsTabContent: React.FC<AttachmentsTabContentProps> = ({
             )}
 
             {linksExpanded && filteredLinks.length > 0 && (
-              <div style={{ 
-                backgroundColor: '#FFFFFF', 
-                border: '1px solid #C8D9EE', 
+              <div style={{
+                backgroundColor: '#FFFFFF',
+                border: '1px solid #C8D9EE',
                 borderRadius: '4px',
                 overflow: 'hidden'
               }}>
@@ -1203,12 +1203,12 @@ export const AttachmentsTabContent: React.FC<AttachmentsTabContentProps> = ({
                       }}
                     >
                       {/* Link Name */}
-                      <div style={{ 
+                      <div style={{
                         height: '52px',
-                        display: 'flex', 
-                        alignItems: 'center', 
+                        display: 'flex',
+                        alignItems: 'center',
                         padding: '0 12px',
-                        minWidth: 0 
+                        minWidth: 0
                       }}>
                         <span style={{
                           fontSize: '13px',
@@ -1223,7 +1223,7 @@ export const AttachmentsTabContent: React.FC<AttachmentsTabContentProps> = ({
                       </div>
 
                       {/* Link URL */}
-                      <div style={{ 
+                      <div style={{
                         height: '52px',
                         display: 'flex',
                         alignItems: 'center',
@@ -1249,31 +1249,31 @@ export const AttachmentsTabContent: React.FC<AttachmentsTabContentProps> = ({
                       </div>
 
                       {/* Uploaded By */}
-                      <div style={{ 
+                      <div style={{
                         height: '52px',
                         display: 'flex',
                         alignItems: 'center',
                         padding: '0 12px',
-                        fontSize: '13px', 
-                        color: '#272721' 
+                        fontSize: '13px',
+                        color: '#272721'
                       }}>
                         {att.uploadedBy}
                       </div>
 
                       {/* Uploaded At */}
-                      <div style={{ 
+                      <div style={{
                         height: '52px',
                         display: 'flex',
                         alignItems: 'center',
                         padding: '0 12px',
-                        fontSize: '13px', 
-                        color: '#6B7280' 
+                        fontSize: '13px',
+                        color: '#6B7280'
                       }}>
                         {att.uploadDate}
                       </div>
 
                       {/* Step Name */}
-                      <div style={{ 
+                      <div style={{
                         height: '52px',
                         display: 'flex',
                         alignItems: 'center',
@@ -1301,10 +1301,10 @@ export const AttachmentsTabContent: React.FC<AttachmentsTabContentProps> = ({
                       </div>
 
                       {/* Actions */}
-                      <div style={{ 
+                      <div style={{
                         height: '52px',
-                        display: 'flex', 
-                        gap: '6px', 
+                        display: 'flex',
+                        gap: '6px',
                         padding: '0 12px',
                         alignItems: 'center'
                       }}>
@@ -1614,11 +1614,11 @@ export const AttachmentsTabContent: React.FC<AttachmentsTabContentProps> = ({
                 </h3>
               </div>
             </div>
-            
+
             <p style={{ fontSize: '14px', color: '#6B7280', marginBottom: '24px' }}>
               Are you sure you want to delete <strong>{deleteTarget.name}</strong>? This action cannot be undone.
             </p>
-            
+
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
               <button
                 onClick={cancelDelete}

@@ -198,13 +198,13 @@ interface DrawingLink {
 /** Single source of truth for drawing links used in reports.
  *  Mirrors DrawingLinks.tsx INITIAL_LINKS exactly. */
 const DRAWING_LINKS: DrawingLink[] = [
-  { tradePackageCode: 'S01', rocId: 'ROC-001', stepNumber: 1, stepName: 'Material PO Issued',    drawingFolderLink: 'https://drive.google.com/folders/S01-ROC001-STEP1' },
-  { tradePackageCode: 'S01', rocId: 'ROC-001', stepNumber: 2, stepName: 'Material Delivered',    drawingFolderLink: 'https://drive.google.com/folders/S01-ROC001-STEP2' },
-  { tradePackageCode: 'S01', rocId: 'ROC-001', stepNumber: 3, stepName: 'Installation',           drawingFolderLink: 'https://drive.google.com/folders/S01-ROC001-STEP3' },
-  { tradePackageCode: 'S01', rocId: 'ROC-001', stepNumber: 4, stepName: 'Testing',                drawingFolderLink: 'https://drive.google.com/folders/S01-ROC001-STEP4' },
-  { tradePackageCode: 'S02', rocId: 'ROC-002', stepNumber: 1, stepName: 'Material PO Issued',    drawingFolderLink: 'https://drive.google.com/folders/S02-ROC002-STEP1' },
-  { tradePackageCode: 'S02', rocId: 'ROC-002', stepNumber: 2, stepName: 'Material Delivered',    drawingFolderLink: 'https://drive.google.com/folders/S02-ROC002-STEP2' },
-  // ROC-003 and ROC-004 have no drawing links added yet
+  { tradePackageCode: 'S15-A5000', rocId: 'ROC-001', stepNumber: 1, stepName: 'Material PO Issued',         drawingFolderLink: 'https://drive.google.com/file/d/1RHH8mRH_6DIgm4JSkRgHlkKx1ty2CP-D/view?usp=sharing' },
+  { tradePackageCode: 'S15-A5000', rocId: 'ROC-001', stepNumber: 2, stepName: 'Material Delivered to Site', drawingFolderLink: 'https://drive.google.com/file/d/1RHH8mRH_6DIgm4JSkRgHlkKx1ty2CP-D/view?usp=sharing' },
+  { tradePackageCode: 'S15-A5000', rocId: 'ROC-001', stepNumber: 3, stepName: 'Equipment Installation',     drawingFolderLink: 'https://drive.google.com/file/d/1RHH8mRH_6DIgm4JSkRgHlkKx1ty2CP-D/view?usp=sharing' },
+  { tradePackageCode: 'S19-A5000', rocId: 'ROC-002', stepNumber: 1, stepName: 'Shop Drawing Approved',      drawingFolderLink: 'https://drive.google.com/file/d/1RHH8mRH_6DIgm4JSkRgHlkKx1ty2CP-D/view?usp=sharing' },
+  { tradePackageCode: 'S19-A5000', rocId: 'ROC-002', stepNumber: 2, stepName: 'Lift & Place',               drawingFolderLink: 'https://drive.google.com/file/d/1RHH8mRH_6DIgm4JSkRgHlkKx1ty2CP-D/view?usp=sharing' },
+  { tradePackageCode: 'S14-A5000', rocId: 'ROC-003', stepNumber: 1, stepName: 'Steel Fabrication Approved', drawingFolderLink: 'https://drive.google.com/file/d/1RHH8mRH_6DIgm4JSkRgHlkKx1ty2CP-D/view?usp=sharing' },
+  // ROC-004 and ROC-005 have no drawing links added yet
 ];
 
 /** Find a drawing-link URL for a given (rocId, stepName) pair. */
